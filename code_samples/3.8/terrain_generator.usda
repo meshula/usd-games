@@ -1,0 +1,350 @@
+#usda 1.0
+(
+    defaultPrim = "ProceduralTerrain"
+)
+
+def "ProceduralTerrain" (
+    kind = "component"
+)
+{
+    # Core terrain parameters
+    float sparkle:terrain:width = 1000.0
+    float sparkle:terrain:length = 1000.0
+    float sparkle:terrain:maxHeight = 200.0
+    int sparkle:terrain:resolution = 256
+    int sparkle:terrain:seed = 12345
+    
+    # Noise parameters
+    def "NoiseSettings" {
+        # Primary height noise
+        def "HeightNoise" {
+            token sparkle:noise:algorithm = "perlin"
+            int sparkle:noise:octaves = 6
+            float sparkle:noise:frequency = 0.01
+            float sparkle:noise:persistence = 0.5
+            float sparkle:noise:lacunarity = 2.0
+        }
+        
+        # Erosion noise
+        def "ErosionNoise" {
+            token sparkle:noise:algorithm = "simplex"
+            int sparkle:noise:octaves = 4
+            float sparkle:noise:frequency = 0.03
+            float sparkle:noise:persistence = 0.6
+            float sparkle:noise:lacunarity = 2.2
+        }
+        
+        # Detail noise
+        def "DetailNoise" {
+            token sparkle:noise:algorithm = "worley"
+            int sparkle:noise:octaves = 3
+            float sparkle:noise:frequency = 0.05
+            float sparkle:noise:persistence = 0.4
+            float sparkle:noise:lacunarity = 2.5
+        }
+    }
+    
+    # Terrain biomes
+    def "Biomes" {
+        def "Mountain" {
+            float sparkle:biome:threshold = 0.7
+            float sparkle:biome:blendRange = 0.1
+            float sparkle:biome:steepness = 0.8
+            
+            def "Materials" {
+                def "Rock" {
+                    float sparkle:material:coverage = 0.7
+                    token sparkle:material:type = "rock"
+                    token sparkle:material:color = "gray"
+                }
+                
+                def "Snow" {
+                    float sparkle:material:coverage = 0.3
+                    token sparkle:material:type = "snow"
+                    float sparkle:material:threshold = 0.85
+                    token sparkle:material:color = "white"
+                }
+            }
+            
+            def "Vegetation" {
+                def "Trees" {
+                    float sparkle:vegetation:density = 0.1
+                    float sparkle:vegetation:maxSlope = 0.4
+                    token sparkle:vegetation:type = "pine"
+                    float sparkle:vegetation:heightRange = 0.7
+                }
+                
+                def "Rocks" {
+                    float sparkle:vegetation:density = 0.5
+                    float sparkle:vegetation:maxSlope = 0.9
+                    token sparkle:vegetation:type = "boulder"
+                }
+            }
+        }
+        
+        def "Forest" {
+            float sparkle:biome:threshold = 0.4
+            float sparkle:biome:blendRange = 0.2
+            float sparkle:biome:steepness = 0.3
+            
+            def "Materials" {
+                def "Grass" {
+                    float sparkle:material:coverage = 0.6
+                    token sparkle:material:type = "grass"
+                    token sparkle:material:color = "green"
+                }
+                
+                def "Dirt" {
+                    float sparkle:material:coverage = 0.3
+                    token sparkle:material:type = "dirt"
+                    token sparkle:material:color = "brown"
+                }
+                
+                def "Rock" {
+                    float sparkle:material:coverage = 0.1
+                    token sparkle:material:type = "rock"
+                    token sparkle:material:color = "gray"
+                }
+            }
+            
+            def "Vegetation" {
+                def "Trees" {
+                    float sparkle:vegetation:density = 0.7
+                    float sparkle:vegetation:maxSlope = 0.5
+                    token sparkle:vegetation:type = "deciduous"
+                    float sparkle:vegetation:heightRange = 0.5
+                }
+                
+                def "Bushes" {
+                    float sparkle:vegetation:density = 0.4
+                    float sparkle:vegetation:maxSlope = 0.6
+                    token sparkle:vegetation:type = "bush"
+                }
+                
+                def "Flowers" {
+                    float sparkle:vegetation:density = 0.3
+                    float sparkle:vegetation:maxSlope = 0.4
+                    token sparkle:vegetation:type = "wildflower"
+                }
+            }
+        }
+        
+        def "Plains" {
+            float sparkle:biome:threshold = 0.2
+            float sparkle:biome:blendRange = 0.2
+            float sparkle:biome:steepness = 0.1
+            
+            def "Materials" {
+                def "Grass" {
+                    float sparkle:material:coverage = 0.9
+                    token sparkle:material:type = "grass"
+                    token sparkle:material:color = "lightgreen"
+                }
+                
+                def "Dirt" {
+                    float sparkle:material:coverage = 0.1
+                    token sparkle:material:type = "dirt"
+                    token sparkle:material:color = "brown"
+                }
+            }
+            
+            def "Vegetation" {
+                def "Trees" {
+                    float sparkle:vegetation:density = 0.1
+                    float sparkle:vegetation:maxSlope = 0.3
+                    token sparkle:vegetation:type = "deciduous"
+                    float sparkle:vegetation:heightRange = 0.2
+                }
+                
+                def "Grass" {
+                    float sparkle:vegetation:density = 0.9
+                    float sparkle:vegetation:maxSlope = 0.7
+                    token sparkle:vegetation:type = "tallgrass"
+                }
+            }
+        }
+        
+        def "Desert" {
+            float sparkle:biome:threshold = 0.1
+            float sparkle:biome:blendRange = 0.1
+            float sparkle:biome:steepness = 0.05
+            
+            def "Materials" {
+                def "Sand" {
+                    float sparkle:material:coverage = 0.95
+                    token sparkle:material:type = "sand"
+                    token sparkle:material:color = "tan"
+                }
+                
+                def "Rock" {
+                    float sparkle:material:coverage = 0.05
+                    token sparkle:material:type = "rock"
+                    token sparkle:material:color = "sandstone"
+                }
+            }
+            
+            def "Vegetation" {
+                def "Cactus" {
+                    float sparkle:vegetation:density = 0.05
+                    float sparkle:vegetation:maxSlope = 0.2
+                    token sparkle:vegetation:type = "cactus"
+                }
+                
+                def "DeadBushes" {
+                    float sparkle:vegetation:density = 0.1
+                    float sparkle:vegetation:maxSlope = 0.3
+                    token sparkle:vegetation:type = "deadbush"
+                }
+            }
+        }
+    }
+    
+    # Variant sets for terrain features
+    variantSet "features" = {
+        "default" {
+            # No additional features beyond basic biomes
+        }
+        
+        "rivers" {
+            over "Features" {
+                def "Rivers" {
+                    bool sparkle:feature:enabled = true
+                    int sparkle:feature:count = 3
+                    float sparkle:feature:width = 10.0
+                    float sparkle:feature:depth = 5.0
+                    float sparkle:feature:sinuosity = 0.7
+                    token sparkle:feature:algorithm = "hydraulic"
+                }
+            }
+        }
+        
+        "mountains" {
+            over "NoiseSettings" {
+                over "HeightNoise" {
+                    float sparkle:noise:frequency = 0.008
+                    int sparkle:noise:octaves = 8
+                }
+            }
+            
+            over "Features" {
+                def "Peaks" {
+                    bool sparkle:feature:enabled = true
+                    int sparkle:feature:count = 5
+                    float sparkle:feature:height = 1.0
+                    float sparkle:feature:radius = 0.15
+                }
+                
+                def "Ridges" {
+                    bool sparkle:feature:enabled = true
+                    int sparkle:feature:count = 3
+                    float sparkle:feature:height = 0.8
+                    float sparkle:feature:width = 0.1
+                }
+            }
+        }
+        
+        "craters" {
+            over "Features" {
+                def "Craters" {
+                    bool sparkle:feature:enabled = true
+                    int sparkle:feature:count = 8
+                    float sparkle:feature:depth = 0.4
+                    float sparkle:feature:radius = 0.1
+                    float sparkle:feature:rimHeight = 0.1
+                }
+            }
+        }
+    }
+    
+    # Variant sets for climate conditions
+    variantSet "climate" = {
+        "temperate" {
+            # Default climate
+        }
+        
+        "tropical" {
+            over "Biomes" {
+                over "Forest" {
+                    over "Vegetation" {
+                        over "Trees" {
+                            token sparkle:vegetation:type = "tropical"
+                            float sparkle:vegetation:density = 0.9
+                        }
+                    }
+                }
+                
+                def "Jungle" {
+                    float sparkle:biome:threshold = 0.5
+                    float sparkle:biome:blendRange = 0.2
+                    float sparkle:biome:steepness = 0.4
+                    
+                    def "Materials" {
+                        def "Grass" {
+                            float sparkle:material:coverage = 0.6
+                            token sparkle:material:type = "grass"
+                            token sparkle:material:color = "darkgreen"
+                        }
+                        
+                        def "Dirt" {
+                            float sparkle:material:coverage = 0.4
+                            token sparkle:material:type = "dirt"
+                            token sparkle:material:color = "darkbrown"
+                        }
+                    }
+                    
+                    def "Vegetation" {
+                        def "Trees" {
+                            float sparkle:vegetation:density = 1.0
+                            float sparkle:vegetation:maxSlope = 0.7
+                            token sparkle:vegetation:type = "tropical"
+                        }
+                        
+                        def "Undergrowth" {
+                            float sparkle:vegetation:density = 0.9
+                            float sparkle:vegetation:maxSlope = 0.8
+                            token sparkle:vegetation:type = "fern"
+                        }
+                    }
+                }
+            }
+        }
+        
+        "arid" {
+            over "Biomes" {
+                over "Plains" {
+                    over "Materials" {
+                        over "Grass" {
+                            token sparkle:material:color = "tan"
+                            token sparkle:material:type = "driedgrass"
+                        }
+                    }
+                    
+                    over "Vegetation" {
+                        over "Trees" {
+                            float sparkle:vegetation:density = 0.05
+                        }
+                    }
+                }
+                
+                over "Forest" {
+                    over "Materials" {
+                        over "Grass" {
+                            token sparkle:material:color = "olive"
+                        }
+                    }
+                    
+                    over "Vegetation" {
+                        over "Trees" {
+                            float sparkle:vegetation:density = 0.3
+                            token sparkle:vegetation:type = "acacia"
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    # Component containers (referenced by variants)
+    def "Features" {
+    }
+}

@@ -1,0 +1,60 @@
+#usda 1.0
+(
+    defaultPrim = "EliteGuardBehaviorTree"
+)
+
+def "EliteGuardBehaviorTree" (
+    references = </BehaviorTrees/GuardBehaviorTree>
+)
+{
+    # Override the combat sequence to make it more aggressive
+    over "RootSelector" {
+        over "CombatSequence" {
+            # Elite guards respond more aggressively
+            int sparkle:node:priority = 150  # Higher priority
+            
+            over "CombatSelector" {
+                # Add a new action for elite guards: call for reinforcements
+                def "CallReinforcementsSequence" {
+                    token sparkle:node:type = "sequence"
+                    int sparkle:node:priority = 90  # High priority but not highest
+                    
+                    # Condition: Health below threshold?
+                    def "HealthCondition" {
+                        token sparkle:node:type = "condition"
+                        token sparkle:condition:type = "attribute"
+                        token sparkle:condition:attribute = "sparkle:health:current"
+                        token sparkle:condition:comparison = "lessThan"
+                        float sparkle:condition:threshold = 50.0
+                        rel sparkle:condition:subject = </Entity>
+                    }
+                    
+                    # Condition: Haven't called for help already?
+                    def "NotCalledYetCondition" {
+                        token sparkle:node:type = "condition"
+                        token sparkle:condition:type = "blackboard"
+                        token sparkle:condition:key = "calledForHelp"
+                        token sparkle:condition:comparison = "equals"
+                        bool sparkle:condition:value = false
+                    }
+                    
+                    # Action: Call for reinforcements
+                    def "CallHelpAction" {
+                        token sparkle:node:type = "action"
+                        token sparkle:action:type = "callReinforcements"
+                        float sparkle:action:radius = 30.0
+                        int sparkle:action:maxAllies = 3
+                    }
+                    
+                    # Action: Set blackboard flag
+                    def "SetFlagAction" {
+                        token sparkle:node:type = "action"
+                        token sparkle:action:type = "setBlackboard"
+                        token sparkle:action:key = "calledForHelp"
+                        bool sparkle:action:value = true
+                    }
+                }
+            }
+        }
+    }
+}

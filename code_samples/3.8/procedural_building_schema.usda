@@ -1,0 +1,119 @@
+#usda 1.0
+
+class "SparkleProceduralBuildingAPI" (
+    inherits = </APISchemaBase>
+    customData = {
+        token apiSchemaType = "singleApply"
+        bool skipCodeGeneration = true
+    }
+    doc = """Procedural building generation parameters."""
+)
+{
+    # Building dimensions
+    float sparkle:building:width = 10.0 (
+        doc = "Building width in meters"
+    )
+    
+    float sparkle:building:depth = 10.0 (
+        doc = "Building depth in meters"
+    )
+    
+    float sparkle:building:height = 6.0 (
+        doc = "Building height in meters"
+    )
+    
+    int sparkle:building:floors = 1 (
+        doc = "Number of floors"
+    )
+    
+    # Building style
+    token sparkle:building:style = "modern" (
+        allowedTokens = ["modern", "medieval", "victorian", "futuristic", "rustic"]
+        doc = "Architectural style of the building"
+    )
+    
+    # Building components
+    bool sparkle:building:hasRoof = true (
+        doc = "Whether the building has a visible roof"
+    )
+    
+    token sparkle:building:roofStyle = "flat" (
+        allowedTokens = ["flat", "pitched", "dome", "gabled", "mansard"]
+        doc = "Style of the roof if present"
+    )
+    
+    int sparkle:building:windowsPerFloor = 4 (
+        doc = "Number of windows per floor"
+    )
+    
+    bool sparkle:building:hasDoor = true (
+        doc = "Whether the building has an entrance door"
+    )
+    
+    # Generation seed and variation
+    int sparkle:building:seed = 0 (
+        doc = "Random seed for procedural generation"
+    )
+    
+    float sparkle:building:variationAmount = 0.2 (
+        doc = "Amount of random variation to apply (0.0-1.0)"
+    )
+    
+    # Level of detail
+    token sparkle:building:lodLevel = "high" (
+        allowedTokens = ["high", "medium", "low"]
+        doc = "Level of detail for generation"
+    )
+}
+
+class "SparkleProceduralCityBlockAPI" (
+    inherits = </APISchemaBase>
+    customData = {
+        token apiSchemaType = "singleApply"
+        bool skipCodeGeneration = true
+    }
+    doc = """Procedural city block generation parameters."""
+)
+{
+    # Block dimensions
+    float sparkle:cityBlock:width = 100.0 (
+        doc = "Block width in meters"
+    )
+    
+    float sparkle:cityBlock:depth = 100.0 (
+        doc = "Block depth in meters"
+    )
+    
+    # Building layout
+    int sparkle:cityBlock:buildingCount = 8 (
+        doc = "Number of buildings to generate"
+    )
+    
+    token sparkle:cityBlock:layoutPattern = "perimeter" (
+        allowedTokens = ["perimeter", "grid", "random", "clustered"]
+        doc = "Pattern for placing buildings"
+    )
+    
+    float sparkle:cityBlock:buildingDensity = 0.7 (
+        doc = "Density of building placement (0.0-1.0)"
+    )
+    
+    # Street properties
+    float sparkle:cityBlock:streetWidth = 8.0 (
+        doc = "Width of streets in meters"
+    )
+    
+    bool sparkle:cityBlock:hasSidewalks = true (
+        doc = "Whether to include sidewalks"
+    )
+    
+    # Urban features
+    token[] sparkle:cityBlock:urbanFeatures = ["streetlights", "trees"] (
+        doc = "Additional urban features to include"
+    )
+    
+    # Generation seed and variation
+    int sparkle:cityBlock:seed = 0 (
+        doc = "Random seed for procedural generation"
+    )
+}

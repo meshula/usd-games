@@ -1,0 +1,469 @@
+#usda 1.0
+(
+    defaultPrim = "ProceduralQuest"
+)
+
+def "ProceduralQuest" (
+    kind = "component"
+)
+{
+    # Core quest parameters
+    string sparkle:quest:id = "proc_quest_001"
+    string sparkle:quest:title = "The Lost Artifact"
+    string sparkle:quest:description = "Find and recover the lost artifact from the ancient ruins."
+    token sparkle:quest:difficulty = "medium"
+    token sparkle:quest:type = "retrieval"
+    int sparkle:quest:minLevel = 5
+    int sparkle:quest:maxLevel = 10
+    bool sparkle:quest:isRepeatable = false
+    
+    # Quest generation parameters
+    int sparkle:quest:seed = 12345
+    bool sparkle:quest:randomizeLocations = true
+    token sparkle:quest:generationAlgorithm = "standard"
+    
+    # Variant sets for quest types
+    variantSet "questType" = {
+        "retrieval" {
+            token sparkle:quest:type = "retrieval"
+            string sparkle:quest:description = "Find and recover the lost artifact from the ancient ruins."
+            
+            over "QuestStructure" {
+                over "Stages" {
+                    def "Stage1" {
+                        string sparkle:stage:name = "Find the entrance to the ruins"
+                        string sparkle:stage:description = "Locate the hidden entrance to the ancient ruins."
+                        token sparkle:stage:type = "exploration"
+                        
+                        def "Location" {
+                            token sparkle:location:type = "poi"
+                            rel sparkle:location:reference = </World/Locations/AncientRuins/Entrance>
+                            float sparkle:location:revealRadius = 50.0
+                        }
+                        
+                        def "Objective" {
+                            token sparkle:objective:type = "discover"
+                            string sparkle:objective:description = "Find the ruins entrance"
+                            rel sparkle:objective:target = </World/Locations/AncientRuins/Entrance>
+                        }
+                    }
+                    
+                    def "Stage2" {
+                        string sparkle:stage:name = "Navigate the ruins"
+                        string sparkle:stage:description = "Make your way through the dangerous ruins to find the artifact chamber."
+                        token sparkle:stage:type = "exploration"
+                        
+                        def "Encounters" {
+                            int sparkle:encounter:count = 3
+                            token sparkle:encounter:type = "combat"
+                            token sparkle:encounter:enemyType = "ruin_guardian"
+                            int sparkle:encounter:enemyLevel = 6
+                        }
+                        
+                        def "Objective" {
+                            token sparkle:objective:type = "navigate"
+                            string sparkle:objective:description = "Reach the artifact chamber"
+                            rel sparkle:objective:target = </World/Locations/AncientRuins/ArtifactChamber>
+                        }
+                    }
+                    
+                    def "Stage3" {
+                        string sparkle:stage:name = "Retrieve the artifact"
+                        string sparkle:stage:description = "Recover the artifact from its ancient pedestal."
+                        token sparkle:stage:type = "retrieval"
+                        
+                        def "Encounter" {
+                            token sparkle:encounter:type = "combat"
+                            token sparkle:encounter:enemyType = "guardian_golem"
+                            int sparkle:encounter:enemyLevel = 8
+                            bool sparkle:encounter:isBoss = true
+                        }
+                        
+                        def "Objective" {
+                            token sparkle:objective:type = "interact"
+                            string sparkle:objective:description = "Take the artifact from the pedestal"
+                            rel sparkle:objective:target = </World/Locations/AncientRuins/ArtifactChamber/Pedestal>
+                        }
+                    }
+                    
+                    def "Stage4" {
+                        string sparkle:stage:name = "Return the artifact"
+                        string sparkle:stage:description = "Return the artifact to the quest giver."
+                        token sparkle:stage:type = "delivery"
+                        
+                        def "Objective" {
+                            token sparkle:objective:type = "deliver"
+                            string sparkle:objective:description = "Return the artifact to the quest giver"
+                            rel sparkle:objective:target = </World/NPCs/QuestGiver>
+                            rel sparkle:objective:item = </Items/LostArtifact>
+                        }
+                    }
+                }
+            }
+            
+            over "Rewards" {
+                int sparkle:reward:gold = 500
+                int sparkle:reward:experience = 1000
+                
+                def "ItemRewards" {
+                    def "Artifact" {
+                        token sparkle:reward:type = "special"
+                        rel sparkle:reward:item = </Items/LostArtifact>
+                    }
+                    
+                    def "BonusItem" {
+                        token sparkle:reward:type = "random"
+                        token sparkle:reward:quality = "rare"
+                        token sparkle:reward:category = "equipment"
+                    }
+                }
+            }
+        }
+        
+        "hunting" {
+            token sparkle:quest:type = "hunting"
+            string sparkle:quest:description = "Hunt down and defeat the dangerous beasts that threaten the village."
+            
+            over "QuestStructure" {
+                over "Stages" {
+                    def "Stage1" {
+                        string sparkle:stage:name = "Locate the hunting grounds"
+                        string sparkle:stage:description = "Find the area where the beasts have been spotted."
+                        token sparkle:stage:type = "exploration"
+                        
+                        def "Location" {
+                            token sparkle:location:type = "region"
+                            rel sparkle:location:reference = </World/Regions/DarkForest>
+                        }
+                        
+                        def "Objective" {
+                            token sparkle:objective:type = "discover"
+                            string sparkle:objective:description = "Find the hunting grounds"
+                            rel sparkle:objective:target = </World/Regions/DarkForest/HuntingGrounds>
+                        }
+                    }
+                    
+                    def "Stage2" {
+                        string sparkle:stage:name = "Hunt the beasts"
+                        string sparkle:stage:description = "Defeat the required number of beasts."
+                        token sparkle:stage:type = "hunting"
+                        
+                        def "HuntingTarget" {
+                            token sparkle:hunting:targetType = "wolf"
+                            int sparkle:hunting:targetCount = 5
+                            int sparkle:hunting:targetLevel = 6
+                        }
+                        
+                        def "Objective" {
+                            token sparkle:objective:type = "kill"
+                            string sparkle:objective:description = "Kill 5 dire wolves"
+                            rel sparkle:objective:target = </Creatures/DireWolf>
+                            int sparkle:objective:count = 5
+                        }
+                    }
+                    
+                    def "Stage3" {
+                        string sparkle:stage:name = "Defeat the alpha"
+                        string sparkle:stage:description = "Hunt down and defeat the alpha beast."
+                        token sparkle:stage:type = "boss"
+                        
+                        def "Encounter" {
+                            token sparkle:encounter:type = "combat"
+                            token sparkle:encounter:enemyType = "alpha_wolf"
+                            int sparkle:encounter:enemyLevel = 8
+                            bool sparkle:encounter:isBoss = true
+                        }
+                        
+                        def "Location" {
+                            token sparkle:location:type = "poi"
+                            rel sparkle:location:reference = </World/Regions/DarkForest/WolfDen>
+                        }
+                        
+                        def "Objective" {
+                            token sparkle:objective:type = "kill"
+                            string sparkle:objective:description = "Defeat the alpha wolf"
+                            rel sparkle:objective:target = </Creatures/AlphaWolf>
+                            int sparkle:objective:count = 1
+                        }
+                    }
+                    
+                    def "Stage4" {
+                        string sparkle:stage:name = "Report success"
+                        string sparkle:stage:description = "Return to the quest giver with proof of your success."
+                        token sparkle:stage:type = "delivery"
+                        
+                        def "Objective" {
+                            token sparkle:objective:type = "deliver"
+                            string sparkle:objective:description = "Deliver the alpha's pelt as proof"
+                            rel sparkle:objective:target = </World/NPCs/QuestGiver>
+                            rel sparkle:objective:item = </Items/AlphaWolfPelt>
+                        }
+                    }
+                }
+            }
+            
+            over "Rewards" {
+                int sparkle:reward:gold = 400
+                int sparkle:reward:experience = 1200
+                
+                def "ItemRewards" {
+                    def "HunterTrophy" {
+                        token sparkle:reward:type = "fixed"
+                        rel sparkle:reward:item = </Items/WolfheadTrophy>
+                    }
+                    
+                    def "BonusItem" {
+                        token sparkle:reward:type = "random"
+                        token sparkle:reward:quality = "uncommon"
+                        token sparkle:reward:category = "weapon"
+                    }
+                }
+            }
+        }
+        
+        "escort" {
+            token sparkle:quest:type = "escort"
+            string sparkle:quest:description = "Protect and escort the merchant safely to the next town."
+            
+            over "QuestStructure" {
+                over "Stages" {
+                    def "Stage1" {
+                        string sparkle:stage:name = "Meet the merchant"
+                        string sparkle:stage:description = "Find and meet with the merchant who needs an escort."
+                        token sparkle:stage:type = "interaction"
+                        
+                        def "Location" {
+                            token sparkle:location:type = "poi"
+                            rel sparkle:location:reference = </World/Locations/TownSquare>
+                        }
+                        
+                        def "Objective" {
+                            token sparkle:objective:type = "talk"
+                            string sparkle:objective:description = "Talk to the merchant"
+                            rel sparkle:objective:target = </World/NPCs/Merchant>
+                        }
+                    }
+                    
+                    def "Stage2" {
+                        string sparkle:stage:name = "Escort the merchant"
+                        string sparkle:stage:description = "Keep the merchant safe as you travel to the next town."
+                        token sparkle:stage:type = "escort"
+                        
+                        def "Encounters" {
+                            int sparkle:encounter:count = 3
+                            token sparkle:encounter:type = "ambush"
+                            token sparkle:encounter:enemyType = "bandit"
+                            int sparkle:encounter:enemyLevel = 6
+                        }
+                        
+                        def "EscortTarget" {
+                            rel sparkle:escort:target = </World/NPCs/Merchant>
+                            float sparkle:escort:moveSpeed = 0.7
+                            bool sparkle:escort:canFight = false
+                            float sparkle:escort:health = 100
+                        }
+                        
+                        def "Objective" {
+                            token sparkle:objective:type = "escort"
+                            string sparkle:objective:description = "Escort the merchant to the next town"
+                            rel sparkle:objective:target = </World/NPCs/Merchant>
+                            rel sparkle:objective:destination = </World/Locations/NextTown>
+                        }
+                    }
+                    
+                    def "Stage3" {
+                        string sparkle:stage:name = "Final ambush"
+                        string sparkle:stage:description = "Defend against a final ambush before reaching the town."
+                        token sparkle:stage:type = "combat"
+                        
+                        def "Encounter" {
+                            token sparkle:encounter:type = "ambush"
+                            token sparkle:encounter:enemyType = "bandit_captain"
+                            int sparkle:encounter:enemyLevel = 8
+                            bool sparkle:encounter:isBoss = true
+                            int sparkle:encounter:minionCount = 4
+                        }
+                        
+                        def "Objective" {
+                            token sparkle:objective:type = "defend"
+                            string sparkle:objective:description = "Protect the merchant from the bandit captain"
+                            rel sparkle:objective:target = </World/NPCs/Merchant>
+                            rel sparkle:objective:enemy = </Creatures/BanditCaptain>
+                        }
+                    }
+                    
+                    def "Stage4" {
+                        string sparkle:stage:name = "Arrive safely"
+                        string sparkle:stage:description = "Complete the journey and bring the merchant safely to town."
+                        token sparkle:stage:type = "delivery"
+                        
+                        def "Objective" {
+                            token sparkle:objective:type = "escort"
+                            string sparkle:objective:description = "Complete the journey to town"
+                            rel sparkle:objective:target = </World/NPCs/Merchant>
+                            rel sparkle:objective:destination = </World/Locations/NextTown/TownGate>
+                        }
+                    }
+                }
+            }
+            
+            over "Rewards" {
+                int sparkle:reward:gold = 600
+                int sparkle:reward:experience = 1000
+                
+                def "ItemRewards" {
+                    def "MerchantGift" {
+                        token sparkle:reward:type = "fixed"
+                        rel sparkle:reward:item = </Items/MerchantToken>
+                    }
+                    
+                    def "BonusItem" {
+                        token sparkle:reward:type = "random"
+                        token sparkle:reward:quality = "uncommon"
+                        token sparkle:reward:category = "accessory"
+                    }
+                }
+            }
+        }
+    }
+    
+    # Variant sets for quest difficulty
+    variantSet "difficulty" = {
+        "easy" {
+            token sparkle:quest:difficulty = "easy"
+            int sparkle:quest:minLevel = 1
+            int sparkle:quest:maxLevel = 5
+            
+            over "QuestStructure" {
+                over "Stages" {
+                    over "Stage2" {
+                        over "Encounters" {
+                            int sparkle:encounter:count = 2
+                            int sparkle:encounter:enemyLevel = 2
+                        }
+                    }
+                    
+                    over "Stage3" {
+                        over "Encounter" {
+                            int sparkle:encounter:enemyLevel = 3
+                            int sparkle:encounter:minionCount = 2
+                        }
+                    }
+                }
+            }
+            
+            over "Rewards" {
+                int sparkle:reward:gold = 200
+                int sparkle:reward:experience = 500
+                
+                over "ItemRewards" {
+                    over "BonusItem" {
+                        token sparkle:reward:quality = "common"
+                    }
+                }
+            }
+        }
+        
+        "medium" {
+            # Default difficulty, no overrides needed
+        }
+        
+        "hard" {
+            token sparkle:quest:difficulty = "hard"
+            int sparkle:quest:minLevel = 8
+            int sparkle:quest:maxLevel = 15
+            
+            over "QuestStructure" {
+                over "Stages" {
+                    over "Stage2" {
+                        over "Encounters" {
+                            int sparkle:encounter:count = 4
+                            int sparkle:encounter:enemyLevel = 10
+                        }
+                    }
+                    
+                    over "Stage3" {
+                        over "Encounter" {
+                            int sparkle:encounter:enemyLevel = 12
+                            int sparkle:encounter:minionCount = 6
+                        }
+                    }
+                }
+            }
+            
+            over "Rewards" {
+                int sparkle:reward:gold = 800
+                int sparkle:reward:experience = 1500
+                
+                over "ItemRewards" {
+                    over "BonusItem" {
+                        token sparkle:reward:quality = "rare"
+                    }
+                    
+                    def "ExtraReward" {
+                        token sparkle:reward:type = "random"
+                        token sparkle:reward:quality = "uncommon"
+                        token sparkle:reward:category = "consumable"
+                    }
+                }
+            }
+        }
+    }
+    
+    # Variant sets for reputation requirements
+    variantSet "reputationRequirement" = {
+        "none" {
+            # No reputation requirement
+        }
+        
+        "friendly" {
+            def "RequiredReputation" {
+                token sparkle:reputation:faction = "townspeople"
+                token sparkle:reputation:level = "friendly"
+                int sparkle:reputation:minimumValue = 1000
+            }
+            
+            over "Rewards" {
+                int sparkle:reward:reputationGain = 500
+                
+                over "ItemRewards" {
+                    def "ReputationBonus" {
+                        token sparkle:reward:type = "fixed"
+                        rel sparkle:reward:item = </Items/TownshipToken>
+                    }
+                }
+            }
+        }
+        
+        "honored" {
+            def "RequiredReputation" {
+                token sparkle:reputation:faction = "townspeople"
+                token sparkle:reputation:level = "honored"
+                int sparkle:reputation:minimumValue = 3000
+            }
+            
+            over "Rewards" {
+                int sparkle:reward:reputationGain = 800
+                int sparkle:reward:gold = 800
+                
+                over "ItemRewards" {
+                    def "ReputationBonus" {
+                        token sparkle:reward:type = "fixed"
+                        rel sparkle:reward:item = </Items/TownKey>
+                    }
+                }
+            }
+        }
+    }
+    
+    # Quest components (referenced by variants)
+    def "QuestStructure" {
+        def "Stages" {
+        }
+    }
+    
+    def "Rewards" {
+        def "ItemRewards" {
+        }
+    }
+}

@@ -1,0 +1,508 @@
+#usda 1.0
+(
+    defaultPrim = "DialogTrees"
+)
+
+def "DialogTrees" (
+    kind = "group"
+)
+{
+    def "BlacksmithDialog" (
+        kind = "component"
+    )
+    {
+        # Dialog metadata
+        string sparkle:dialog:speakerName = "Gareth the Blacksmith"
+        token sparkle:dialog:voiceType = "male_gruff"
+        
+        # Root dialog node
+        def "Greeting" {
+            token sparkle:dialog:type = "node"
+            string sparkle:dialog:text = "Well met, traveler. Need something forged or repaired?"
+            
+            # Greeting variants based on relationship
+            variantSet "relationship" = {
+                "stranger" {
+                    string sparkle:dialog:text = "Well met, traveler. Need something forged or repaired?"
+                }
+                
+                "acquaintance" {
+                    string sparkle:dialog:text = "Good to see you again. What can I help you with today?"
+                }
+                
+                "friend" {
+                    string sparkle:dialog:text = "Ah, there you are! Always good to see a friendly face. What can I do for you?"
+                }
+                
+                "best_friend" {
+                    string sparkle:dialog:text = "Hey, my friend! I was hoping you'd stop by. What do you need?"
+                }
+            }
+            
+            # Greeting variants based on player status
+            variantSet "playerStatus" = {
+                "normal" {
+                    # Use default text
+                }
+                
+                "injured" {
+                    string sparkle:dialog:text = "By the gods, you look terrible! Did you get into another fight? Maybe see the healer before chatting?"
+                }
+                
+                "celebrated" {
+                    string sparkle:dialog:text = "Well, well! If it isn't the hero everyone's talking about! What can I do for you today?"
+                }
+            }
+            
+            # Player response options
+            def "Responses" {
+                def "Shop" {
+                    token sparkle:dialog:type = "response"
+                    string sparkle:dialog:text = "I'd like to see what you have for sale."
+                    rel sparkle:dialog:next = </DialogTrees/BlacksmithDialog/Shop>
+                }
+                
+                def "Quest" {
+                    token sparkle:dialog:type = "response"
+                    string sparkle:dialog:text = "I found that ore you were looking for."
+                    rel sparkle:dialog:next = </DialogTrees/BlacksmithDialog/QuestTurnIn>
+                    
+                    # Condition: Only show if player has the quest
+                    def "Condition" {
+                        token sparkle:condition:type = "quest"
+                        string sparkle:condition:questId = "blacksmith_ore"
+                        token sparkle:condition:state = "active"
+                    }
+                    
+                    # Condition: Only show if player has the ore
+                    def "ItemCondition" {
+                        token sparkle:condition:type = "inventory"
+                        string sparkle:condition:itemId = "special_ore"
+                        int sparkle:condition:quantity = 1
+                    }
+                }
+                
+                def "Lore" {
+                    token sparkle:dialog:type = "response"
+                    string sparkle:dialog:text = "How long have you been the blacksmith here?"
+                    rel sparkle:dialog:next = </DialogTrees/BlacksmithDialog/Lore>
+                }
+                
+                def "Goodbye" {
+                    token sparkle:dialog:type = "response"
+                    string sparkle:dialog:text = "Nothing today, thanks."
+                    rel sparkle:dialog:next = </DialogTrees/BlacksmithDialog/Goodbye>
+                }
+            }
+        }
+        
+        def "Shop" {
+            token sparkle:dialog:type = "node"
+            string sparkle:dialog:text = "Here's what I have available."
+            
+            # Dialog action to open shop UI
+            def "Action" {
+                token sparkle:action:type = "openShop"
+                string sparkle:action:shopId = "blacksmith_shop"
+                rel sparkle:action:inventory = </Shops/Blacksmith>
+            }
+            
+            # Return to main options after shopping
+            def "Responses" {
+                def "Return" {
+                    token sparkle:dialog:type = "response"
+                    string sparkle:dialog:text = "Let me ask you something else."
+                    rel sparkle:dialog:next = </DialogTrees/BlacksmithDialog/Greeting>
+                }
+                
+                def "Goodbye" {
+                    token sparkle:dialog:type = "response"
+                    string sparkle:dialog:text = "That's all, thanks."
+                    rel sparkle:dialog:next = </DialogTrees/BlacksmithDialog/Goodbye>
+                }
+            }
+        }
+        
+        def "QuestTurnIn" {
+            token sparkle:dialog:type = "node"
+            string sparkle:dialog:text = "Ah, excellent! This is exactly what I needed. Here's your payment as promised."
+            
+            # Dialog action for quest completion
+            def "Action" {
+                token sparkle:action:type = "questProgress"
+                string sparkle:action:questId = "blacksmith_ore"
+                token sparkle:action:operation = "complete"
+            }
+            
+            # Dialog action to remove ore from inventory
+            def "RemoveItemAction" {
+                token sparkle:action:type = "removeItem"
+                string sparkle:action:itemId = "special_ore"
+                int sparkle:action:quantity = 1
+            }
+            
+            # Dialog action to give reward
+            def "RewardAction" {
+                token sparkle:action:type = "giveItem"
+                string sparkle:action:itemId = "steel_sword"
+                int sparkle:action:quantity = 1
+            }
+            
+            # Return to main options after quest
+            def "Responses" {
+                def "Thanks" {
+                    token sparkle:dialog:type = "response"
+                    string sparkle:dialog:text = "Thanks! Let me ask you something else."
+                    rel sparkle:dialog:next = </DialogTrees/BlacksmithDialog/Greeting>
+                }
+                
+                def "Goodbye" {
+                    token sparkle:dialog:type = "response"
+                    string sparkle:dialog:text = "That's all, thanks."
+                    rel sparkle:dialog:next = </DialogTrees/BlacksmithDialog/Goodbye>
+                }
+            }
+        }
+        
+        def "Lore" {
+            token sparkle:dialog:type = "node"
+            string sparkle:dialog:text = "Been the smith here going on twenty years now. Learned from my father, and he from his. Smith's hammer has been in my family for generations."
+            
+            # Return to main menu after lore
+            def "Responses" {
+                def "MoreLore" {
+                    token sparkle:dialog:type = "response"
+                    string sparkle:dialog:text = "Tell me about the village."
+                    rel sparkle:dialog:next = </DialogTrees/BlacksmithDialog/LoreVillage>
+                }
+                
+                def "Return" {
+                    token sparkle:dialog:type = "response"
+                    string sparkle:dialog:text = "Let me ask you something else."
+                    rel sparkle:dialog:next = </DialogTrees/BlacksmithDialog/Greeting>
+                }
+                
+                def "Goodbye" {
+                    token sparkle:dialog:type = "response"
+                    string sparkle:dialog:text = "Thanks for the history."
+                    rel sparkle:dialog:next = </DialogTrees/BlacksmithDialog/Goodbye>
+                }
+            }
+        }
+        
+        def "LoreVillage" {
+            token sparkle:dialog:type = "node"
+            string sparkle:dialog:text = "This village has stood for over a century. Been through wars, plagues, and all manner of troubles, but we're a hardy folk. The old oak in the center was planted when the first stones were laid."
+            
+            # Return options
+            def "Responses" {
+                def "Return" {
+                    token sparkle:dialog:type = "response"
+                    string sparkle:dialog:text = "Let me ask you something else."
+                    rel sparkle:dialog:next = </DialogTrees/BlacksmithDialog/Greeting>
+                }
+                
+                def "Goodbye" {
+                    token sparkle:dialog:type = "response"
+                    string sparkle:dialog:text = "Thanks for the information."
+                    rel sparkle:dialog:next = </DialogTrees/BlacksmithDialog/Goodbye>
+                }
+            }
+        }
+        
+        def "Goodbye" {
+            token sparkle:dialog:type = "node"
+            string sparkle:dialog:text = "Safe travels, friend. Come back when you need something sturdy."
+            
+            # Dialog action to end conversation
+            def "Action" {
+                token sparkle:action:type = "endDialog"
+            }
+        }
+    }
+    
+    # Another NPC dialog tree example
+    def "VillageElderDialog" (
+        kind = "component"
+    )
+    {
+        # Dialog metadata
+        string sparkle:dialog:speakerName = "Elder Thorne"
+        token sparkle:dialog:voiceType = "female_elderly"
+        
+        # Root dialog node
+        def "Greeting" {
+            token sparkle:dialog:type = "node"
+            string sparkle:dialog:text = "Greetings, child. What brings you to speak with me today?"
+            
+            # Greeting variants based on quest progression
+            variantSet "questStatus" = {
+                "noQuest" {
+                    # Default greeting
+                }
+                
+                "questActive" {
+                    string sparkle:dialog:text = "Have you found the ancient artifact yet? Time grows short."
+                }
+                
+                "questComplete" {
+                    string sparkle:dialog:text = "The village owes you a debt of gratitude for your heroism."
+                }
+            }
+            
+            # Player response options
+            def "Responses" {
+                def "Quest" {
+                    token sparkle:dialog:type = "response"
+                    string sparkle:dialog:text = "Tell me about the ancient artifact."
+                    rel sparkle:dialog:next = </DialogTrees/VillageElderDialog/QuestStart>
+                    
+                    # Only show if player has no active quest
+                    def "Condition" {
+                        token sparkle:condition:type = "quest"
+                        string sparkle:condition:questId = "elder_artifact"
+                        token sparkle:condition:state = "unavailable"
+                    }
+                }
+                
+                def "QuestUpdate" {
+                    token sparkle:dialog:type = "response"
+                    string sparkle:dialog:text = "I've found the artifact!"
+                    rel sparkle:dialog:next = </DialogTrees/VillageElderDialog/QuestComplete>
+                    
+                    # Only show if player has active quest and the artifact
+                    def "QuestCondition" {
+                        token sparkle:condition:type = "quest"
+                        string sparkle:condition:questId = "elder_artifact"
+                        token sparkle:condition:state = "active"
+                    }
+                    
+                    # Check if player has the artifact
+                    def "ItemCondition" {
+                        token sparkle:condition:type = "inventory"
+                        string sparkle:condition:itemId = "ancient_artifact"
+                        int sparkle:condition:quantity = 1
+                    }
+                }
+                
+                def "Lore" {
+                    token sparkle:dialog:type = "response"
+                    string sparkle:dialog:text = "Tell me about the history of this village."
+                    rel sparkle:dialog:next = </DialogTrees/VillageElderDialog/VillageLore>
+                }
+                
+                def "Goodbye" {
+                    token sparkle:dialog:type = "response"
+                    string sparkle:dialog:text = "Farewell, Elder."
+                    rel sparkle:dialog:next = </DialogTrees/VillageElderDialog/Goodbye>
+                }
+            }
+        }
+        
+        def "QuestStart" {
+            token sparkle:dialog:type = "node"
+            string sparkle:dialog:text = "The ancient artifact is a powerful relic from our ancestors. It has been stolen by cultists who seek to use its power for dark rituals. You must retrieve it before the next full moon."
+            
+            # Dialog action to start quest
+            def "Action" {
+                token sparkle:action:type = "questProgress"
+                string sparkle:action:questId = "elder_artifact"
+                token sparkle:action:operation = "start"
+            }
+            
+            # Accept or decline quest
+            def "Responses" {
+                def "Accept" {
+                    token sparkle:dialog:type = "response"
+                    string sparkle:dialog:text = "I'll find the artifact."
+                    rel sparkle:dialog:next = </DialogTrees/VillageElderDialog/QuestAccepted>
+                }
+                
+                def "Decline" {
+                    token sparkle:dialog:type = "response"
+                    string sparkle:dialog:text = "I'm not ready for this task."
+                    rel sparkle:dialog:next = </DialogTrees/VillageElderDialog/QuestDeclined>
+                }
+            }
+        }
+        
+        def "QuestAccepted" {
+            token sparkle:dialog:type = "node"
+            string sparkle:dialog:text = "You are brave indeed. The cultists have made their camp in the abandoned mines to the north. Take this map, it will help guide your way."
+            
+            # Dialog action to give quest item
+            def "GiveMapAction" {
+                token sparkle:action:type = "giveItem"
+                string sparkle:action:itemId = "cult_hideout_map"
+                int sparkle:action:quantity = 1
+            }
+            
+            # Dialog action to update quest journal
+            def "UpdateJournalAction" {
+                token sparkle:action:type = "questProgress"
+                string sparkle:action:questId = "elder_artifact"
+                token sparkle:action:operation = "updateObjective"
+                string sparkle:action:objectiveId = "find_hideout"
+                token sparkle:action:objectiveState = "active"
+            }
+            
+            # Continue conversation
+            def "Responses" {
+                def "Thanks" {
+                    token sparkle:dialog:type = "response"
+                    string sparkle:dialog:text = "Thank you for the information."
+                    rel sparkle:dialog:next = </DialogTrees/VillageElderDialog/Greeting>
+                }
+                
+                def "Goodbye" {
+                    token sparkle:dialog:type = "response"
+                    string sparkle:dialog:text = "I'll head out right away."
+                    rel sparkle:dialog:next = </DialogTrees/VillageElderDialog/Goodbye>
+                }
+            }
+        }
+        
+        def "QuestDeclined" {
+            token sparkle:dialog:type = "node"
+            string sparkle:dialog:text = "I understand your hesitation. This is no small task. Return when you feel ready to undertake this burden."
+            
+            # Dialog action to reset quest state
+            def "ResetQuestAction" {
+                token sparkle:action:type = "questProgress"
+                string sparkle:action:questId = "elder_artifact"
+                token sparkle:action:operation = "reset"
+            }
+            
+            # Return to main conversation
+            def "Responses" {
+                def "Return" {
+                    token sparkle:dialog:type = "response"
+                    string sparkle:dialog:text = "Let me ask you something else."
+                    rel sparkle:dialog:next = </DialogTrees/VillageElderDialog/Greeting>
+                }
+            }
+        }
+        
+        def "QuestComplete" {
+            token sparkle:dialog:type = "node"
+            string sparkle:dialog:text = "You've done it! The artifact is safe once more. The village owes you a great debt. Please, take this ancient armor as a token of our gratitude."
+            
+            # Dialog actions for quest completion
+            def "CompleteQuestAction" {
+                token sparkle:action:type = "questProgress"
+                string sparkle:action:questId = "elder_artifact"
+                token sparkle:action:operation = "complete"
+            }
+            
+            def "RemoveArtifactAction" {
+                token sparkle:action:type = "removeItem"
+                string sparkle:action:itemId = "ancient_artifact"
+                int sparkle:action:quantity = 1
+            }
+            
+            def "GiveRewardAction" {
+                token sparkle:action:type = "giveItem"
+                string sparkle:action:itemId = "guardian_armor"
+                int sparkle:action:quantity = 1
+            }
+            
+            def "GiveGoldAction" {
+                token sparkle:action:type = "modifyCurrency"
+                string sparkle:action:currency = "gold"
+                int sparkle:action:amount = 500
+            }
+            
+            # Continue dialog
+            def "Responses" {
+                def "Thanks" {
+                    token sparkle:dialog:type = "response"
+                    string sparkle:dialog:text = "Thank you, Elder. I'm honored."
+                    rel sparkle:dialog:next = </DialogTrees/VillageElderDialog/QuestAftermath>
+                }
+            }
+        }
+        
+        def "QuestAftermath" {
+            token sparkle:dialog:type = "node"
+            string sparkle:dialog:text = "The village will hold a celebration in your honor tonight. There are still dark forces at work, but for now, we may rest easy thanks to your courage."
+            
+            # Dialog action to update reputation
+            def "ReputationAction" {
+                token sparkle:action:type = "modifyReputation"
+                string sparkle:action:faction = "village"
+                int sparkle:action:amount = 25
+            }
+            
+            # Final responses
+            def "Responses" {
+                def "Return" {
+                    token sparkle:dialog:type = "response"
+                    string sparkle:dialog:text = "Let me ask you something else."
+                    rel sparkle:dialog:next = </DialogTrees/VillageElderDialog/Greeting>
+                }
+                
+                def "Goodbye" {
+                    token sparkle:dialog:type = "response"
+                    string sparkle:dialog:text = "I should prepare for the celebration."
+                    rel sparkle:dialog:next = </DialogTrees/VillageElderDialog/Goodbye>
+                }
+            }
+        }
+        
+        def "VillageLore" {
+            token sparkle:dialog:type = "node"
+            string sparkle:dialog:text = "Our village was founded over three centuries ago by refugees fleeing the Great War. They discovered this valley, hidden and fertile, and decided to make it their home. The ancient stones you see throughout the village are remnants of an even older civilization."
+            
+            # Continue lore or return
+            def "Responses" {
+                def "MoreLore" {
+                    token sparkle:dialog:type = "response"
+                    string sparkle:dialog:text = "Tell me about the ancient civilization."
+                    rel sparkle:dialog:next = </DialogTrees/VillageElderDialog/AncientLore>
+                }
+                
+                def "Return" {
+                    token sparkle:dialog:type = "response"
+                    string sparkle:dialog:text = "Let me ask you something else."
+                    rel sparkle:dialog:next = </DialogTrees/VillageElderDialog/Greeting>
+                }
+            }
+        }
+        
+        def "AncientLore" {
+            token sparkle:dialog:type = "node"
+            string sparkle:dialog:text = "Little is known about them, but their artifacts suggest they possessed knowledge and magic far beyond our own. They vanished suddenly, leaving only their monuments and relics behind. Some say they ascended to another plane of existence, others believe they destroyed themselves with their own power."
+            
+            # Unlock new dialogue option based on knowledge gained
+            def "UnlockLoreAction" {
+                token sparkle:action:type = "unlockDialog"
+                string sparkle:action:dialogId = "ancient_civilization_lore"
+            }
+            
+            # Return options
+            def "Responses" {
+                def "Return" {
+                    token sparkle:dialog:type = "response"
+                    string sparkle:dialog:text = "Let me ask you something else."
+                    rel sparkle:dialog:next = </DialogTrees/VillageElderDialog/Greeting>
+                }
+                
+                def "Goodbye" {
+                    token sparkle:dialog:type = "response"
+                    string sparkle:dialog:text = "Thank you for sharing this history."
+                    rel sparkle:dialog:next = </DialogTrees/VillageElderDialog/Goodbye>
+                }
+            }
+        }
+        
+        def "Goodbye" {
+            token sparkle:dialog:type = "node"
+            string sparkle:dialog:text = "May wisdom guide your path, brave one."
+            
+            # Dialog action to end conversation
+            def "Action" {
+                token sparkle:action:type = "endDialog"
+            }
+        }
+    }
+}

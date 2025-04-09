@@ -1,0 +1,93 @@
+#usda 1.0
+(
+    defaultPrim = "VillagerSchedule"
+)
+
+def "VillagerSchedule" (
+    kind = "component"
+    apiSchemas = ["SparkleScheduleAPI"]
+)
+{
+    # Variant set for different day types
+    variantSet "dayType" = {
+        "weekday" {
+            string[] sparkle:schedule:activities = [
+                "sleep", "wakeup", "eat_breakfast", "work", 
+                "eat_lunch", "work", "free_time", "eat_dinner", "socialize", "sleep"
+            ]
+            
+            float[] sparkle:schedule:times = [
+                0.0, 6.0, 6.5, 8.0, 12.0, 13.0, 17.0, 18.0, 19.0, 22.0
+            ]
+            
+            token[] sparkle:schedule:locations = [
+                "home_bed", "home", "home_table", "work_location",
+                "tavern", "work_location", "village_square", "home_table", "tavern", "home_bed"
+            ]
+            
+            token[] sparkle:schedule:interruptible = [
+                "free_time", "socialize"
+            ]
+        }
+        
+        "weekend" {
+            string[] sparkle:schedule:activities = [
+                "sleep", "wakeup", "eat_breakfast", "free_time", 
+                "eat_lunch", "socialize", "eat_dinner", "tavern_time", "sleep"
+            ]
+            
+            float[] sparkle:schedule:times = [
+                0.0, 7.0, 7.5, 9.0, 12.0, 13.0, 18.0, 19.0, 23.0
+            ]
+            
+            token[] sparkle:schedule:locations = [
+                "home_bed", "home", "home_table", "village_square",
+                "tavern", "village_square", "home_table", "tavern", "home_bed"
+            ]
+            
+            token[] sparkle:schedule:interruptible = [
+                "free_time", "socialize", "tavern_time"
+            ]
+        }
+        
+        "festival" {
+            string[] sparkle:schedule:activities = [
+                "sleep", "wakeup", "eat_breakfast", "festival_attendance", 
+                "eat_lunch", "festival_attendance", "feast", "celebration", "sleep"
+            ]
+            
+            float[] sparkle:schedule:times = [
+                0.0, 6.0, 6.5, 8.0, 12.0, 13.0, 18.0, 19.0, 24.0
+            ]
+            
+            token[] sparkle:schedule:locations = [
+                "home_bed", "home", "home_table", "village_square",
+                "festival_grounds", "festival_grounds", "festival_grounds", "festival_grounds", "home_bed"
+            ]
+            
+            token[] sparkle:schedule:interruptible = [
+                "festival_attendance", "celebration"
+            ]
+        }
+        
+        "rainy" {
+            string[] sparkle:schedule:activities = [
+                "sleep", "wakeup", "eat_breakfast", "indoor_activity", 
+                "eat_lunch", "indoor_activity", "eat_dinner", "indoor_activity", "sleep"
+            ]
+            
+            float[] sparkle:schedule:times = [
+                0.0, 7.0, 7.5, 9.0, 12.0, 13.0, 18.0, 19.0, 22.0
+            ]
+            
+            token[] sparkle:schedule:locations = [
+                "home_bed", "home", "home_table", "home",
+                "home_table", "home", "home_table", "home", "home_bed"
+            ]
+            
+            token[] sparkle:schedule:interruptible = [
+                "indoor_activity"
+            ]
+        }
+    }
+}

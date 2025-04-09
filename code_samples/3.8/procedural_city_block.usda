@@ -1,0 +1,295 @@
+#usda 1.0
+(
+    defaultPrim = "CityBlock"
+)
+
+def "CityBlock" (
+    kind = "component"
+    apiSchemas = ["SparkleProceduralCityBlockAPI"]
+)
+{
+    # Block dimensions and layout
+    float sparkle:cityBlock:width = 120.0
+    float sparkle:cityBlock:depth = 120.0
+    int sparkle:cityBlock:buildingCount = 10
+    token sparkle:cityBlock:layoutPattern = "perimeter"
+    float sparkle:cityBlock:buildingDensity = 0.8
+    float sparkle:cityBlock:streetWidth = 10.0
+    bool sparkle:cityBlock:hasSidewalks = true
+    token[] sparkle:cityBlock:urbanFeatures = ["streetlights", "trees", "benches"]
+    int sparkle:cityBlock:seed = 12345
+    
+    # Variant sets for different neighborhood types
+    variantSet "neighborhoodType" = {
+        "residential" {
+            float sparkle:cityBlock:buildingDensity = 0.7
+            token[] sparkle:cityBlock:urbanFeatures = ["streetlights", "trees", "mailboxes", "gardens"]
+            
+            over "BuildingDefaults" {
+                # Default building parameters for residential area
+                token sparkle:building:style = "medieval"
+                int sparkle:building:floors = 2
+                token sparkle:building:roofStyle = "pitched"
+                
+                # Building type distribution
+                def "BuildingDistribution" {
+                    int sparkle:distribution:house = 80
+                    int sparkle:distribution:shop = 15
+                    int sparkle:distribution:tavern = 5
+                }
+                
+                # Material theme distribution
+                def "MaterialDistribution" {
+                    int sparkle:distribution:wood = 60
+                    int sparkle:distribution:stone = 30
+                    int sparkle:distribution:brick = 10
+                }
+            }
+            
+            over "UrbanFeatures" {
+                def "Trees" {
+                    int sparkle:urbanFeature:count = 15
+                    token sparkle:urbanFeature:distribution = "natural"
+                    float sparkle:urbanFeature:density = 0.8
+                    token[] sparkle:urbanFeature:species = ["oak", "maple", "pine"]
+                }
+                
+                def "Gardens" {
+                    bool sparkle:urbanFeature:enabled = true
+                    float sparkle:urbanFeature:size = 5.0
+                    float sparkle:urbanFeature:coverage = 0.4
+                }
+            }
+        }
+        
+        "commercial" {
+            float sparkle:cityBlock:buildingDensity = 0.9
+            token[] sparkle:cityBlock:urbanFeatures = ["streetlights", "benches", "signage"]
+            
+            over "BuildingDefaults" {
+                # Default building parameters for commercial area
+                token sparkle:building:style = "medieval"
+                int sparkle:building:floors = 2
+                token sparkle:building:roofStyle = "flat"
+                
+                # Building type distribution
+                def "BuildingDistribution" {
+                    int sparkle:distribution:house = 10
+                    int sparkle:distribution:shop = 75
+                    int sparkle:distribution:tavern = 15
+                }
+                
+                # Material theme distribution
+                def "MaterialDistribution" {
+                    int sparkle:distribution:wood = 25
+                    int sparkle:distribution:stone = 25
+                    int sparkle:distribution:brick = 50
+                }
+            }
+            
+            over "UrbanFeatures" {
+                def "Signage" {
+                    bool sparkle:urbanFeature:enabled = true
+                    int sparkle:urbanFeature:count = 8
+                    float sparkle:urbanFeature:size = 2.0
+                }
+                
+                def "MarketStalls" {
+                    bool sparkle:urbanFeature:enabled = true
+                    int sparkle:urbanFeature:count = 6
+                    token sparkle:urbanFeature:distribution = "clustered"
+                }
+            }
+        }
+        
+        "mixed" {
+            float sparkle:cityBlock:buildingDensity = 0.8
+            token[] sparkle:cityBlock:urbanFeatures = ["streetlights", "trees", "benches", "signage"]
+            
+            over "BuildingDefaults" {
+                # Default building parameters for mixed area
+                token sparkle:building:style = "medieval"
+                int sparkle:building:floors = 2
+                token sparkle:building:roofStyle = "gabled"
+                
+                # Building type distribution
+                def "BuildingDistribution" {
+                    int sparkle:distribution:house = 40
+                    int sparkle:distribution:shop = 45
+                    int sparkle:distribution:tavern = 15
+                }
+                
+                # Material theme distribution
+                def "MaterialDistribution" {
+                    int sparkle:distribution:wood = 40
+                    int sparkle:distribution:stone = 30
+                    int sparkle:distribution:brick = 30
+                }
+            }
+            
+            over "UrbanFeatures" {
+                def "Trees" {
+                    int sparkle:urbanFeature:count = 8
+                    token sparkle:urbanFeature:distribution = "planned"
+                    float sparkle:urbanFeature:density = 0.5
+                    token[] sparkle:urbanFeature:species = ["oak", "maple"]
+                }
+                
+                def "Signage" {
+                    bool sparkle:urbanFeature:enabled = true
+                    int sparkle:urbanFeature:count = 5
+                    float sparkle:urbanFeature:size = 1.5
+                }
+            }
+        }
+    }
+    
+    # Variant set for different time periods
+    variantSet "eraPeriod" = {
+        "medieval" {
+            over "BuildingDefaults" {
+                token sparkle:building:style = "medieval"
+                token[] sparkle:building:availableRoofStyles = ["pitched", "gabled"]
+                
+                over "MaterialDistribution" {
+                    int sparkle:distribution:wood = 60
+                    int sparkle:distribution:stone = 30
+                    int sparkle:distribution:brick = 10
+                }
+            }
+            
+            over "Streets" {
+                token sparkle:street:material = "dirt"
+                bool sparkle:street:isPaved = false
+                float sparkle:street:irregularity = 0.6
+            }
+            
+            over "UrbanFeatures" {
+                def "Wells" {
+                    bool sparkle:urbanFeature:enabled = true
+                    int sparkle:urbanFeature:count = 2
+                }
+                
+                over "Streetlights" {
+                    bool sparkle:urbanFeature:enabled = false
+                }
+            }
+        }
+        
+        "renaissance" {
+            over "BuildingDefaults" {
+                token sparkle:building:style = "renaissance"
+                token[] sparkle:building:availableRoofStyles = ["pitched", "gabled", "mansard"]
+                
+                over "MaterialDistribution" {
+                    int sparkle:distribution:wood = 30
+                    int sparkle:distribution:stone = 40
+                    int sparkle:distribution:brick = 30
+                }
+            }
+            
+            over "Streets" {
+                token sparkle:street:material = "cobblestone"
+                bool sparkle:street:isPaved = true
+                float sparkle:street:irregularity = 0.4
+            }
+            
+            over "UrbanFeatures" {
+                def "Fountains" {
+                    bool sparkle:urbanFeature:enabled = true
+                    int sparkle:urbanFeature:count = 1
+                }
+                
+                over "Streetlights" {
+                    bool sparkle:urbanFeature:enabled = true
+                    token sparkle:urbanFeature:type = "oil_lamp"
+                }
+            }
+        }
+        
+        "victorian" {
+            over "BuildingDefaults" {
+                token sparkle:building:style = "victorian"
+                token[] sparkle:building:availableRoofStyles = ["mansard", "gabled"]
+                
+                over "MaterialDistribution" {
+                    int sparkle:distribution:wood = 20
+                    int sparkle:distribution:stone = 30
+                    int sparkle:distribution:brick = 50
+                }
+            }
+            
+            over "Streets" {
+                token sparkle:street:material = "cobblestone"
+                bool sparkle:street:isPaved = true
+                float sparkle:street:irregularity = 0.2
+            }
+            
+            over "UrbanFeatures" {
+                over "Streetlights" {
+                    bool sparkle:urbanFeature:enabled = true
+                    token sparkle:urbanFeature:type = "gas_lamp"
+                    int sparkle:urbanFeature:count = 8
+                }
+            }
+        }
+    }
+    
+    # Variant set for weather conditions
+    variantSet "weatherCondition" = {
+        "normal" {
+            # Default appearance
+        }
+        
+        "rainy" {
+            over "Streets" {
+                bool sparkle:street:isWet = true
+                float sparkle:street:puddleAmount = 0.7
+                float sparkle:street:reflectivity = 0.6
+            }
+            
+            over "Buildings" {
+                def "WeatherEffects" {
+                    bool sparkle:weatherEffect:wetWalls = true
+                    float sparkle:weatherEffect:streakIntensity = 0.5
+                    float sparkle:weatherEffect:darkening = 0.2
+                }
+            }
+        }
+        
+        "snowy" {
+            over "Streets" {
+                bool sparkle:street:hasSnow = true
+                float sparkle:street:snowDepth = 0.2
+                float sparkle:street:snowCoverage = 0.9
+            }
+            
+            over "Buildings" {
+                def "WeatherEffects" {
+                    bool sparkle:weatherEffect:snowOnRoofs = true
+                    float sparkle:weatherEffect:snowDepth = 0.3
+                    float sparkle:weatherEffect:icicles = true
+                }
+            }
+            
+            over "UrbanFeatures" {
+                over "Trees" {
+                    bool sparkle:urbanFeature:snowCovered = true
+                }
+            }
+        }
+    }
+    
+    # Block components (referenced by variants)
+    def "Buildings" {
+    }
+    
+    def "Streets" {
+    }
+    
+    def "BuildingDefaults" {
+    }
+    
+    def "UrbanFeatures" {
+    }
+}

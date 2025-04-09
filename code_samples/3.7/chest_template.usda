@@ -1,0 +1,132 @@
+#usda 1.0
+(
+    defaultPrim = "InteractionTemplates"
+)
+
+def "InteractionTemplates" (
+    kind = "group"
+)
+{
+    def "ChestTemplate" (
+        kind = "component"
+    )
+    {
+        # Core chest properties
+        bool sparkle:object:interactive = true
+        token sparkle:object:type = "container"
+        bool sparkle:object:isOpen = false
+        
+        # Contents
+        def "Contents" {
+            token sparkle:container:type = "random"
+            rel sparkle:container:lootTable = </LootTables/ChestLoot>
+            int sparkle:container:minItems = 1
+            int sparkle:container:maxItems = 5
+        }
+        
+        # Interaction definition
+        def "Interaction" {
+            token sparkle:interaction:type = "container"
+            string sparkle:interaction:prompt = "Open Chest"
+            
+            # State machine for chest behavior
+            def "StateMachine" {
+                token sparkle:state:current = "closed"
+                
+                def "ClosedState" {
+                    token sparkle:state:name = "closed"
+                    
+                    def "ToOpeningTransition" {
+                        token sparkle:transition:targetState = "opening"
+                        token sparkle:transition:trigger = "interact"
+                    }
+                }
+                
+                def "OpeningState" {
+                    token sparkle:state:name = "opening"
+                    string sparkle:state:enterAction = "play_opening_animation"
+                    float sparkle:state:duration = 1.2
+                    
+                    def "ToOpenTransition" {
+                        token sparkle:transition:targetState = "open"
+                        token sparkle:transition:trigger = "animation_complete"
+                    }
+                }
+                
+                def "OpenState" {
+                    token sparkle:state:name = "open"
+                    string sparkle:state:enterAction = "show_inventory"
+                }
+                
+                def "LockedState" {
+                    token sparkle:state:name = "locked"
+                    string sparkle:state:enterAction = "play_locked_sound"
+                    
+                    def "ToOpeningTransition" {
+                        token sparkle:transition:targetState = "opening"
+                        token sparkle:transition:trigger = "unlock"
+                    }
+                }
+            }
+        }
+        
+        # Physical representation
+        def "Physical" {
+            def "Collider" {
+                token sparkle:physics:type = "box"
+                float3 sparkle:physics:size = (1, 0.6, 0.6)
+                bool sparkle:physics:enabled = true
+            }
+        }
+        
+        # Animation definition
+        def "Animation" {
+            def "OpenAnimation" {
+                token sparkle:animation:type = "rotation"
+                float3 sparkle:animation:axis = (1, 0, 0)
+                float sparkle:animation:startAngle = 0
+                float sparkle:animation:endAngle = -110
+                float sparkle:animation:duration = 1.2
+                token sparkle:animation:easing = "easeOutBack"
+            }
+        }
+        
+        # Audio definition
+        def "Audio" {
+            def "OpenSound" {
+                token sparkle:audio:type = "sfx"
+                token sparkle:audio:event = "chest_open"
+                float sparkle:audio:volume = 0.8
+                float sparkle:audio:pitch = 1.0
+            }
+            
+            def "LockedSound" {
+                token sparkle:audio:type = "sfx"
+                token sparkle:audio:event = "chest_locked"
+                float sparkle:audio:volume = 0.6
+                float sparkle:audio:pitch = 1.0
+            }
+        }
+        
+        # Visual representation
+        def "Visual" {
+            def "ChestMesh" (
+                references = @meshes/containers/chest_base.usda@</Mesh>
+            )
+            {
+            }
+            
+            def "ChestLid" (
+                references = @meshes/containers/chest_lid.usda@</Mesh>
+            )
+            {
+            }
+            
+            def "Material" (
+                references = @materials/wood_chest.usda@</Material>
+            )
+            {
+            }
+        }
+    }
+}

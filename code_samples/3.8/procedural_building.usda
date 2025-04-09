@@ -1,0 +1,272 @@
+#usda 1.0
+(
+    defaultPrim = "ProceduralBuilding"
+)
+
+def "ProceduralBuilding" (
+    kind = "component"
+    apiSchemas = ["SparkleProceduralBuildingAPI"]
+)
+{
+    # Base building parameters
+    float sparkle:building:width = 12.0
+    float sparkle:building:depth = 8.0
+    float sparkle:building:height = 9.0
+    int sparkle:building:floors = 2
+    token sparkle:building:style = "medieval"
+    token sparkle:building:roofStyle = "pitched"
+    int sparkle:building:windowsPerFloor = 3
+    int sparkle:building:seed = 42
+    token sparkle:building:lodLevel = "high"
+    
+    # Variant sets for different building configurations
+    variantSet "buildingType" = {
+        "house" {
+            float sparkle:building:width = 12.0
+            float sparkle:building:depth = 8.0
+            float sparkle:building:height = 9.0
+            int sparkle:building:floors = 2
+            token sparkle:building:roofStyle = "pitched"
+            int sparkle:building:windowsPerFloor = 3
+            
+            # House-specific components
+            def "Components" {
+                def "Chimney" {
+                    bool sparkle:component:enabled = true
+                    float3 sparkle:component:position = (5, 9, 1)
+                    float3 sparkle:component:scale = (1, 2, 1)
+                }
+                
+                def "Garden" {
+                    bool sparkle:component:enabled = true
+                    float sparkle:component:size = 3.0
+                    token sparkle:component:position = "front"
+                }
+            }
+        }
+        
+        "shop" {
+            float sparkle:building:width = 10.0
+            float sparkle:building:depth = 12.0
+            float sparkle:building:height = 8.0
+            int sparkle:building:floors = 2
+            token sparkle:building:roofStyle = "flat"
+            int sparkle:building:windowsPerFloor = 4
+            
+            # Shop-specific components
+            def "Components" {
+                def "Signboard" {
+                    bool sparkle:component:enabled = true
+                    float3 sparkle:component:position = (0, 5, -6)
+                    float2 sparkle:component:size = (6, 1)
+                }
+                
+                def "Awning" {
+                    bool sparkle:component:enabled = true
+                    float2 sparkle:component:size = (8, 1.5)
+                    token sparkle:component:color = "red"
+                }
+                
+                def "DisplayWindow" {
+                    bool sparkle:component:enabled = true
+                    float2 sparkle:component:size = (6, 2)
+                }
+            }
+        }
+        
+        "tavern" {
+            float sparkle:building:width = 15.0
+            float sparkle:building:depth = 12.0
+            float sparkle:building:height = 10.0
+            int sparkle:building:floors = 2
+            token sparkle:building:roofStyle = "gabled"
+            int sparkle:building:windowsPerFloor = 5
+            
+            # Tavern-specific components
+            def "Components" {
+                def "Signboard" {
+                    bool sparkle:component:enabled = true
+                    float3 sparkle:component:position = (0, 5, -6)
+                    float2 sparkle:component:size = (4, 2)
+                    token sparkle:component:signType = "hanging"
+                }
+                
+                def "Chimney" {
+                    bool sparkle:component:enabled = true
+                    float3 sparkle:component:position = (-5, 10, 2)
+                    float3 sparkle:component:scale = (1.5, 3, 1.5)
+                }
+                
+                def "OutdoorSeating" {
+                    bool sparkle:component:enabled = true
+                    float sparkle:component:size = 4.0
+                    int sparkle:component:tableCount = 3
+                }
+            }
+        }
+    }
+    
+    # Level of detail variant set
+    variantSet "lodLevel" = {
+        "high" {
+            token sparkle:building:lodLevel = "high"
+            
+            over "Roof" {
+                def "RoofDetails" {
+                    bool sparkle:detail:enabled = true
+                    int sparkle:detail:elementCount = 20
+                }
+                
+                def "Weathering" {
+                    bool sparkle:detail:enabled = true
+                    float sparkle:detail:intensity = 0.7
+                }
+            }
+            
+            over "Walls" {
+                def "WallDetails" {
+                    bool sparkle:detail:enabled = true
+                    token sparkle:detail:brickPattern = "flemish"
+                    int sparkle:detail:textureResolution = 2048
+                }
+            }
+        }
+        
+        "medium" {
+            token sparkle:building:lodLevel = "medium"
+            
+            over "Roof" {
+                def "RoofDetails" {
+                    bool sparkle:detail:enabled = true
+                    int sparkle:detail:elementCount = 10
+                }
+                
+                def "Weathering" {
+                    bool sparkle:detail:enabled = true
+                    float sparkle:detail:intensity = 0.4
+                }
+            }
+            
+            over "Walls" {
+                def "WallDetails" {
+                    bool sparkle:detail:enabled = true
+                    token sparkle:detail:brickPattern = "simple"
+                    int sparkle:detail:textureResolution = 1024
+                }
+            }
+        }
+        
+        "low" {
+            token sparkle:building:lodLevel = "low"
+            
+            over "Roof" {
+                def "RoofDetails" {
+                    bool sparkle:detail:enabled = false
+                }
+                
+                def "Weathering" {
+                    bool sparkle:detail:enabled = false
+                }
+            }
+            
+            over "Walls" {
+                def "WallDetails" {
+                    bool sparkle:detail:enabled = false
+                    token sparkle:detail:brickPattern = "none"
+                    int sparkle:detail:textureResolution = 512
+                }
+            }
+        }
+    }
+    
+    # Material variant set
+    variantSet "materialTheme" = {
+        "stone" {
+            over "Materials" {
+                def "PrimaryMaterial" {
+                    token sparkle:material:type = "stone"
+                    token sparkle:material:color = "gray"
+                    float sparkle:material:roughness = 0.8
+                    token sparkle:material:pattern = "cobblestone"
+                }
+                
+                def "TrimMaterial" {
+                    token sparkle:material:type = "stone"
+                    token sparkle:material:color = "darkgray"
+                    float sparkle:material:roughness = 0.7
+                }
+                
+                def "RoofMaterial" {
+                    token sparkle:material:type = "slate"
+                    token sparkle:material:color = "darkgray"
+                    float sparkle:material:roughness = 0.6
+                }
+            }
+        }
+        
+        "wood" {
+            over "Materials" {
+                def "PrimaryMaterial" {
+                    token sparkle:material:type = "wood"
+                    token sparkle:material:color = "brown"
+                    float sparkle:material:roughness = 0.9
+                    token sparkle:material:pattern = "planks"
+                }
+                
+                def "TrimMaterial" {
+                    token sparkle:material:type = "wood"
+                    token sparkle:material:color = "darkbrown"
+                    float sparkle:material:roughness = 0.85
+                }
+                
+                def "RoofMaterial" {
+                    token sparkle:material:type = "thatch"
+                    token sparkle:material:color = "tan"
+                    float sparkle:material:roughness = 1.0
+                }
+            }
+        }
+        
+        "brick" {
+            over "Materials" {
+                def "PrimaryMaterial" {
+                    token sparkle:material:type = "brick"
+                    token sparkle:material:color = "red"
+                    float sparkle:material:roughness = 0.75
+                    token sparkle:material:pattern = "flemish"
+                }
+                
+                def "TrimMaterial" {
+                    token sparkle:material:type = "stone"
+                    token sparkle:material:color = "lightgray"
+                    float sparkle:material:roughness = 0.7
+                }
+                
+                def "RoofMaterial" {
+                    token sparkle:material:type = "tile"
+                    token sparkle:material:color = "terracotta"
+                    float sparkle:material:roughness = 0.8
+                }
+            }
+        }
+    }
+    
+    # Building core components (referenced by variants)
+    def "Walls" {
+    }
+    
+    def "Roof" {
+    }
+    
+    def "Windows" {
+    }
+    
+    def "Door" {
+    }
+    
+    def "Materials" {
+    }
+    
+    def "Components" {
+    }
+}

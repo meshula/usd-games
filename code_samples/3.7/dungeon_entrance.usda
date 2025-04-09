@@ -1,0 +1,72 @@
+#usda 1.0
+(
+    defaultPrim = "DungeonEntrance"
+)
+
+def "DungeonEntrance" (
+    references = </InteractionTemplates/DoorTemplate>
+)
+{
+    # Override the door's properties
+    string sparkle:object:name = "Dungeon Entrance"
+    
+    # Require a key to open
+    over "Interaction" {
+        over "StateMachine" {
+            # Change initial state to locked
+            token sparkle:state:current = "locked"
+            
+            # Add a locked state
+            def "LockedState" {
+                token sparkle:state:name = "locked"
+                string sparkle:state:enterAction = "play_locked_sound"
+                string sparkle:interaction:prompt = "Locked"
+                
+                def "ToOpeningTransition" {
+                    token sparkle:transition:targetState = "opening"
+                    token sparkle:transition:trigger = "use_key"
+                    
+                    # Key requirement
+                    def "KeyRequirement" {
+                        token sparkle:requirement:type = "inventory"
+                        string sparkle:requirement:itemId = "dungeon_key"
+                        bool sparkle:requirement:removeOnUse = true
+                    }
+                }
+            }
+        }
+    }
+    
+    # Custom appearance
+    over "Visual" {
+        over "DoorMesh" {
+            # Override with dungeon door mesh
+            over "Material" {
+                token sparkle:material:variation = "dungeon"
+            }
+        }
+    }
+    
+    # Custom audio
+    over "Audio" {
+        over "OpenSound" {
+            token sparkle:audio:event = "heavy_door_open"
+            float sparkle:audio:volume = 1.2
+            float sparkle:audio:pitch = 0.8
+        }
+        
+        over "CloseSound" {
+            token sparkle:audio:event = "heavy_door_close" 
+            float sparkle:audio:volume = 1.2
+            float sparkle:audio:pitch = 0.8
+        }
+        
+        # Add locked sound
+        def "LockedSound" {
+            token sparkle:audio:type = "sfx"
+            token sparkle:audio:event = "door_locked"
+            float sparkle:audio:volume = 0.8
+            float sparkle:audio:pitch = 1.0
+        }
+    }
+}

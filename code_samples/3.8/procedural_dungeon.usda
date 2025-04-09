@@ -1,0 +1,330 @@
+#usda 1.0
+(
+    defaultPrim = "ProceduralDungeon"
+)
+
+def "ProceduralDungeon" (
+    kind = "component"
+)
+{
+    # Core dungeon parameters
+    int sparkle:dungeon:roomCount = 10
+    int sparkle:dungeon:minRoomSize = 5
+    int sparkle:dungeon:maxRoomSize = 15
+    float sparkle:dungeon:corridorWidth = 3.0
+    token sparkle:dungeon:algorithm = "bsp" # binary space partitioning
+    int sparkle:dungeon:seed = 42
+    
+    # Variant sets for dungeon types
+    variantSet "dungeonType" = {
+        "cave" {
+            token sparkle:dungeon:algorithm = "cellular"
+            float sparkle:dungeon:roomIrregularity = 0.8
+            bool sparkle:dungeon:hasNaturalFeatures = true
+            
+            over "RoomDefaults" {
+                token sparkle:room:floorMaterial = "dirt"
+                token sparkle:room:wallMaterial = "rock"
+                token sparkle:room:ceilingMaterial = "rock"
+                bool sparkle:room:hasStalactites = true
+                bool sparkle:room:hasRubble = true
+                
+                def "LightingDefaults" {
+                    token sparkle:lighting:type = "ambient"
+                    float sparkle:lighting:intensity = 0.3
+                    float3 sparkle:lighting:color = (0.1, 0.2, 0.4)
+                    
+                    def "Torches" {
+                        bool sparkle:lighting:enabled = true
+                        int sparkle:lighting:count = 4
+                        float sparkle:lighting:intensity = 0.8
+                        float3 sparkle:lighting:color = (1.0, 0.7, 0.3)
+                        token sparkle:lighting:type = "point"
+                    }
+                }
+            }
+            
+            over "SpecialFeatures" {
+                def "WaterPools" {
+                    bool sparkle:feature:enabled = true
+                    int sparkle:feature:count = 3
+                    float sparkle:feature:size = 0.2
+                }
+                
+                def "Crystals" {
+                    bool sparkle:feature:enabled = true
+                    int sparkle:feature:count = 5
+                    float sparkle:feature:size = 0.1
+                    token[] sparkle:feature:colors = ["blue", "purple"]
+                }
+            }
+        }
+        
+        "dungeon" {
+            token sparkle:dungeon:algorithm = "bsp"
+            float sparkle:dungeon:roomIrregularity = 0.2
+            bool sparkle:dungeon:hasNaturalFeatures = false
+            
+            over "RoomDefaults" {
+                token sparkle:room:floorMaterial = "stonebrick"
+                token sparkle:room:wallMaterial = "stonebrick"
+                token sparkle:room:ceilingMaterial = "stonebrick"
+                bool sparkle:room:hasPillars = true
+                
+                def "LightingDefaults" {
+                    token sparkle:lighting:type = "ambient"
+                    float sparkle:lighting:intensity = 0.2
+                    float3 sparkle:lighting:color = (0.1, 0.1, 0.1)
+                    
+                    def "Torches" {
+                        bool sparkle:lighting:enabled = true
+                        int sparkle:lighting:count = 6
+                        float sparkle:lighting:intensity = 0.7
+                        float3 sparkle:lighting:color = (1.0, 0.6, 0.2)
+                        token sparkle:lighting:type = "point"
+                    }
+                }
+            }
+            
+            over "SpecialFeatures" {
+                def "Traps" {
+                    bool sparkle:feature:enabled = true
+                    int sparkle:feature:count = 3
+                    token[] sparkle:feature:types = ["spikes", "dart", "pressure_plate"]
+                }
+                
+                def "Chains" {
+                    bool sparkle:feature:enabled = true
+                    int sparkle:feature:count = 8
+                }
+            }
+        }
+        
+        "crypt" {
+            token sparkle:dungeon:algorithm = "cellular"
+            float sparkle:dungeon:roomIrregularity = 0.4
+            bool sparkle:dungeon:hasNaturalFeatures = false
+            
+            over "RoomDefaults" {
+                token sparkle:room:floorMaterial = "cobblestone"
+                token sparkle:room:wallMaterial = "stone"
+                token sparkle:room:ceilingMaterial = "stone"
+                bool sparkle:room:hasPillars = true
+                bool sparkle:room:hasSarcophagi = true
+                
+                def "LightingDefaults" {
+                    token sparkle:lighting:type = "ambient"
+                    float sparkle:lighting:intensity = 0.1
+                    float3 sparkle:lighting:color = (0.05, 0.05, 0.1)
+                    
+                    def "Candles" {
+                        bool sparkle:lighting:enabled = true
+                        int sparkle:lighting:count = 10
+                        float sparkle:lighting:intensity = 0.5
+                        float3 sparkle:lighting:color = (1.0, 0.5, 0.2)
+                        token sparkle:lighting:type = "point"
+                    }
+                }
+            }
+            
+            over "SpecialFeatures" {
+                def "Tombs" {
+                    bool sparkle:feature:enabled = true
+                    int sparkle:feature:count = 8
+                    token sparkle:feature:type = "sarcophagus"
+                }
+                
+                def "Cobwebs" {
+                    bool sparkle:feature:enabled = true
+                    int sparkle:feature:count = 15
+                    float sparkle:feature:density = 0.7
+                }
+            }
+        }
+    }
+    
+    # Variant set for difficulty levels
+    variantSet "difficulty" = {
+        "easy" {
+            over "Encounters" {
+                int sparkle:encounter:enemyCount = 5
+                float sparkle:encounter:enemyLevel = 1.0
+                
+                over "EnemyDistribution" {
+                    int sparkle:distribution:basic = 80
+                    int sparkle:distribution:elite = 20
+                    int sparkle:distribution:boss = 0
+                }
+                
+                over "TreasureDistribution" {
+                    int sparkle:distribution:common = 70
+                    int sparkle:distribution:uncommon = 25
+                    int sparkle:distribution:rare = 5
+                    int sparkle:distribution:epic = 0
+                }
+            }
+            
+            over "SpecialFeatures" {
+                over "Traps" {
+                    bool sparkle:feature:enabled = false
+                }
+            }
+        }
+        
+        "medium" {
+            over "Encounters" {
+                int sparkle:encounter:enemyCount = 12
+                float sparkle:encounter:enemyLevel = 1.5
+                
+                over "EnemyDistribution" {
+                    int sparkle:distribution:basic = 60
+                    int sparkle:distribution:elite = 35
+                    int sparkle:distribution:boss = 5
+                }
+                
+                over "TreasureDistribution" {
+                    int sparkle:distribution:common = 50
+                    int sparkle:distribution:uncommon = 35
+                    int sparkle:distribution:rare = 12
+                    int sparkle:distribution:epic = 3
+                }
+            }
+            
+            over "SpecialFeatures" {
+                over "Traps" {
+                    bool sparkle:feature:enabled = true
+                    int sparkle:feature:count = 3
+                }
+            }
+        }
+        
+        "hard" {
+            over "Encounters" {
+                int sparkle:encounter:enemyCount = 20
+                float sparkle:encounter:enemyLevel = 2.0
+                
+                over "EnemyDistribution" {
+                    int sparkle:distribution:basic = 40
+                    int sparkle:distribution:elite = 45
+                    int sparkle:distribution:boss = 15
+                }
+                
+                over "TreasureDistribution" {
+                    int sparkle:distribution:common = 30
+                    int sparkle:distribution:uncommon = 40
+                    int sparkle:distribution:rare = 20
+                    int sparkle:distribution:epic = 10
+                }
+            }
+            
+            over "SpecialFeatures" {
+                over "Traps" {
+                    bool sparkle:feature:enabled = true
+                    int sparkle:feature:count = 6
+                    float sparkle:feature:damage = 2.0
+                }
+            }
+        }
+    }
+    
+    # Variant set for environmental themes
+    variantSet "environment" = {
+        "normal" {
+            # Default look
+        }
+        
+        "flooded" {
+            over "RoomDefaults" {
+                float sparkle:room:waterDepth = 0.5
+                bool sparkle:room:hasWaterSurface = true
+                
+                over "LightingDefaults" {
+                    float3 sparkle:lighting:color = (0.1, 0.3, 0.4)
+                    
+                    def "WaterReflections" {
+                        bool sparkle:lighting:enabled = true
+                        float sparkle:lighting:intensity = 0.3
+                        token sparkle:lighting:type = "reflection"
+                    }
+                }
+            }
+            
+            over "Passages" {
+                bool sparkle:passage:hasWater = true
+                float sparkle:passage:waterDepth = 0.5
+            }
+            
+            over "SpecialFeatures" {
+                def "Waterfalls" {
+                    bool sparkle:feature:enabled = true
+                    int sparkle:feature:count = 3
+                }
+                
+                def "Fungi" {
+                    bool sparkle:feature:enabled = true
+                    int sparkle:feature:count = 12
+                    token[] sparkle:feature:types = ["glowing_mushroom"]
+                }
+            }
+        }
+        
+        "corrupted" {
+            over "RoomDefaults" {
+                token sparkle:room:floorMaterial = "corruptstone"
+                token sparkle:room:wallMaterial = "corruptstone"
+                
+                over "LightingDefaults" {
+                    float3 sparkle:lighting:color = (0.3, 0.1, 0.3)
+                    
+                    def "CorruptionLights" {
+                        bool sparkle:lighting:enabled = true
+                        int sparkle:lighting:count = 8
+                        float sparkle:lighting:intensity = 0.6
+                        float3 sparkle:lighting:color = (0.8, 0.2, 0.8)
+                        token sparkle:lighting:type = "point"
+                    }
+                }
+            }
+            
+            over "SpecialFeatures" {
+                def "CorruptionGrowth" {
+                    bool sparkle:feature:enabled = true
+                    int sparkle:feature:count = 15
+                    float sparkle:feature:coverage = 0.6
+                }
+                
+                def "CorruptionCrystals" {
+                    bool sparkle:feature:enabled = true
+                    int sparkle:feature:count = 8
+                    token[] sparkle:feature:colors = ["purple", "black"]
+                }
+            }
+            
+            over "Encounters" {
+                float sparkle:encounter:enemyLevel = 2.5
+                
+                over "EnemyDistribution" {
+                    int sparkle:distribution:corrupted = 60
+                }
+            }
+        }
+    }
+    
+    # Level components (referenced by variants)
+    def "RoomDefaults" {
+    }
+    
+    def "Passages" {
+    }
+    
+    def "Encounters" {
+        def "EnemyDistribution" {
+        }
+        
+        def "TreasureDistribution" {
+        }
+    }
+    
+    def "SpecialFeatures" {
+    }
+}

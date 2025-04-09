@@ -1,0 +1,173 @@
+#usda 1.0
+(
+    defaultPrim = "BehaviorTrees"
+)
+
+def "BehaviorTrees" (
+    kind = "group"
+)
+{
+    def "GuardBehaviorTree" (
+        kind = "component"
+    )
+    {
+        token sparkle:tree:type = "behaviorTree"
+        
+        # Root selector node
+        def "RootSelector" {
+            token sparkle:node:type = "selector"
+            
+            # Combat sequence when enemies are present
+            def "CombatSequence" {
+                token sparkle:node:type = "sequence"
+                int sparkle:node:priority = 100
+                
+                # Condition: Is enemy detected?
+                def "EnemyDetectedCondition" {
+                    token sparkle:node:type = "condition"
+                    token sparkle:condition:type = "entityDetected"
+                    token sparkle:condition:entityType = "enemy"
+                    rel sparkle:condition:perceptionSource = </Entity/Perception>
+                }
+                
+                # Action: Draw weapon
+                def "DrawWeaponAction" {
+                    token sparkle:node:type = "action"
+                    token sparkle:action:type = "animation"
+                    token sparkle:action:animation = "draw_weapon"
+                    bool sparkle:action:waitForCompletion = true
+                }
+                
+                # Action: Combat behavior (nested selector)
+                def "CombatSelector" {
+                    token sparkle:node:type = "selector"
+                    
+                    # Melee combat if in range
+                    def "MeleeCombatSequence" {
+                        token sparkle:node:type = "sequence"
+                        
+                        # Condition: Enemy in melee range?
+                        def "MeleeRangeCondition" {
+                            token sparkle:node:type = "condition"
+                            token sparkle:condition:type = "distance"
+                            token sparkle:condition:target = "enemy"
+                            float sparkle:condition:range = 2.0
+                            token sparkle:condition:comparison = "lessThan"
+                        }
+                        
+                        # Action: Melee attack
+                        def "MeleeAttackAction" {
+                            token sparkle:node:type = "action"
+                            token sparkle:action:type = "combat"
+                            token sparkle:action:attackType = "melee"
+                        }
+                    }
+                    
+                    # Ranged combat if not in melee range
+                    def "RangedCombatSequence" {
+                        token sparkle:node:type = "sequence"
+                        
+                        # Condition: Enemy in ranged attack range?
+                        def "RangedCondition" {
+                            token sparkle:node:type = "condition"
+                            token sparkle:condition:type = "distance"
+                            token sparkle:condition:target = "enemy"
+                            float sparkle:condition:range = 15.0
+                            token sparkle:condition:comparison = "lessThan"
+                        }
+                        
+                        # Action: Ranged attack
+                        def "RangedAttackAction" {
+                            token sparkle:node:type = "action"
+                            token sparkle:action:type = "combat"
+                            token sparkle:action:attackType = "ranged"
+                        }
+                    }
+                    
+                    # Pursue enemy if out of range
+                    def "PursueSequence" {
+                        token sparkle:node:type = "sequence"
+                        
+                        # Action: Move to enemy
+                        def "MoveToEnemyAction" {
+                            token sparkle:node:type = "action"
+                            token sparkle:action:type = "movement"
+                            token sparkle:action:movementType = "pursue"
+                            token sparkle:action:targetType = "enemy"
+                            float sparkle:action:desiredDistance = 1.5
+                        }
+                    }
+                }
+            }
+            
+            # Alert sequence when something suspicious is detected
+            def "AlertSequence" {
+                token sparkle:node:type = "sequence"
+                int sparkle:node:priority = 80
+                
+                # Condition: Is something suspicious detected?
+                def "SuspiciousCondition" {
+                    token sparkle:node:type = "condition"
+                    token sparkle:condition:type = "perceptionAlert"
+                    float sparkle:condition:minimumAlertness = 0.5
+                    rel sparkle:condition:perceptionSource = </Entity/Perception>
+                }
+                
+                # Action: Look at suspicious location
+                def "LookAtAction" {
+                    token sparkle:node:type = "action"
+                    token sparkle:action:type = "lookAt"
+                    token sparkle:action:target = "alertLocation"
+                    float sparkle:action:duration = 2.0
+                }
+                
+                # Action: Investigate
+                def "InvestigateAction" {
+                    token sparkle:node:type = "action"
+                    token sparkle:action:type = "movement"
+                    token sparkle:action:movementType = "investigate"
+                    token sparkle:action:target = "alertLocation"
+                }
+            }
+            
+            # Patrol sequence for normal duty
+            def "PatrolSequence" {
+                token sparkle:node:type = "sequence"
+                int sparkle:node:priority = 50
+                
+                # Condition: Is it time to patrol?
+                def "PatrolTimeCondition" {
+                    token sparkle:node:type = "condition"
+                    token sparkle:condition:type = "schedule"
+                    token sparkle:condition:activity = "patrol"
+                    rel sparkle:condition:scheduleSource = </Entity/Schedule>
+                }
+                
+                # Action: Follow patrol path
+                def "PatrolAction" {
+                    token sparkle:node:type = "action"
+                    token sparkle:action:type = "patrol"
+                    rel sparkle:action:patrolPath = </Entity/Patrol/Path>
+                    token sparkle:action:patrolType = "cycle"
+                }
+            }
+            
+            # Idle sequence (lowest priority fallback)
+            def "IdleSequence" {
+                token sparkle:node:type = "sequence"
+                int sparkle:node:priority = 0
+                
+                # Action: Idle animation
+                def "IdleAction" {
+                    token sparkle:node:type = "action"
+                    token sparkle:action:type = "animation"
+                    token sparkle:action:animation = "idle"
+                    float sparkle:action:duration = 0
+                    bool sparkle:action:loop = true
+                }
+            }
+        }
+    }
+    
+    # More behavior trees...
+}

@@ -1,0 +1,260 @@
+# behavior_schemas.usda
+#
+# Defines the core behavior-related schemas for game entities
+
+class "SparkleBehaviorAPI" (
+    inherits = </APISchemaBase>
+    customData = {
+        token apiSchemaType = "singleApply"
+        bool skipCodeGeneration = true
+    }
+    doc = """Core behavior properties for game entities."""
+)
+{
+    # Behavior type
+    token sparkle:behavior:type = "idle" (
+        allowedTokens = [
+            "idle", "passive", "neutral", "aggressive", "friendly", 
+            "defensive", "fleeing", "investigating", "patrolling"
+        ]
+        doc = "Primary behavior type for this entity"
+    )
+    
+    # Awareness
+    float sparkle:behavior:sightRadius = 10 (
+        doc = "Distance in meters at which this entity can see targets"
+    )
+    
+    float sparkle:behavior:hearingRadius = 15 (
+        doc = "Distance in meters at which this entity can hear sounds"
+    )
+    
+    # Interaction
+    rel sparkle:behavior:interactions = [] (
+        doc = "Relationships to interaction definitions for this entity"
+    )
+    
+    # Decision making
+    token sparkle:behavior:decisionSystem = "simple" (
+        allowedTokens = ["none", "simple", "utility", "behaviorTree", "stateMachine", "goap"]
+        doc = "Type of decision-making system to use"
+    )
+    
+    rel sparkle:behavior:decisionData = [] (
+        doc = "Relationship to decision-making data (behavior tree, state machine, etc.)"
+    )
+}
+
+class "SparkleScheduleAPI" (
+    inherits = </APISchemaBase>
+    customData = {
+        token apiSchemaType = "singleApply"
+        bool skipCodeGeneration = true
+    }
+    doc = """Schedule-based behavior for NPCs and other entities."""
+)
+{
+    # Schedule entries
+    string[] sparkle:schedule:activities = [] (
+        doc = "List of activities in the schedule"
+    )
+    
+    float[] sparkle:schedule:times = [] (
+        doc = "Times (in hours, 0-24) when each activity starts"
+    )
+    
+    token[] sparkle:schedule:locations = [] (
+        doc = "Location tokens for where each activity happens"
+    )
+    
+    rel[] sparkle:schedule:locationPaths = [] (
+        doc = "Relationships to specific locations for activities"
+    )
+    
+    # Schedule constraints
+    token sparkle:schedule:priority = "normal" (
+        allowedTokens = ["low", "normal", "high", "critical"]
+        doc = "Priority level for this schedule"
+    )
+    
+    token[] sparkle:schedule:interruptible = [] (
+        doc = "Which activities can be interrupted by other behaviors"
+    )
+    
+    # Condition-based activities
+    token[] sparkle:schedule:weatherConditions = [] (
+        doc = "Weather conditions that affect this schedule"
+    )
+}
+
+class "SparklePatrolAPI" (
+    inherits = </APISchemaBase>
+    customData = {
+        token apiSchemaType = "singleApply"
+        bool skipCodeGeneration = true
+    }
+    doc = """Patrol-based behavior for NPCs and other entities."""
+)
+{
+    # Patrol path
+    rel sparkle:patrol:path = [] (
+        doc = "Relationship to path or waypoints for patrol"
+    )
+    
+    token sparkle:patrol:pathType = "cycle" (
+        allowedTokens = ["cycle", "pingpong", "once", "random"]
+        doc = "How to traverse the patrol path"
+    )
+    
+    # Patrol timing
+    float sparkle:patrol:moveSpeed = 1.0 (
+        doc = "Movement speed during patrol"
+    )
+    
+    float sparkle:patrol:waypointWaitTime = 0.0 (
+        doc = "Time to wait at each waypoint"
+    )
+    
+    # Patrol behaviors
+    bool sparkle:patrol:lookAround = false (
+        doc = "Whether to look around at waypoints"
+    )
+    
+    token sparkle:patrol:alertBehavior = "investigate" (
+        allowedTokens = ["ignore", "investigate", "attack", "flee", "call_for_help"]
+        doc = "How to respond to alerts during patrol"
+    )
+}
+
+class "SparkleDialogAPI" (
+    inherits = </APISchemaBase>
+    customData = {
+        token apiSchemaType = "singleApply"
+        bool skipCodeGeneration = true
+    }
+    doc = """Dialog capabilities for NPCs."""
+)
+{
+    # Dialog content
+    rel sparkle:dialog:dialogTree = [] (
+        doc = "Relationship to dialog tree definition"
+    )
+    
+    # Dialog conditions
+    token[] sparkle:dialog:availableStates = ["any"] (
+        doc = "Game states in which dialog is available"
+    )
+    
+    token[] sparkle:dialog:requiredPlayerRelationship = ["any"] (
+        doc = "Required player relationship levels for dialog"
+    )
+    
+    # Dialog memory
+    int sparkle:dialog:memorySize = 5 (
+        doc = "How many past interactions to remember"
+    )
+    
+    bool sparkle:dialog:remembersPlayer = true (
+        doc = "Whether this NPC remembers the player between conversations"
+    )
+    
+    # Dialog presentation
+    token sparkle:dialog:voiceType = "normal" (
+        doc = "Type of voice for dialog audio"
+    )
+    
+    token sparkle:dialog:emotionDefault = "neutral" (
+        doc = "Default emotional state for dialog"
+    )
+}
+
+class "SparkleEmotionAPI" (
+    inherits = </APISchemaBase>
+    customData = {
+        token apiSchemaType = "singleApply"
+        bool skipCodeGeneration = true
+    }
+    doc = """Emotional state system for NPCs."""
+)
+{
+    # Emotional state
+    token sparkle:emotion:currentState = "neutral" (
+        allowedTokens = [
+            "neutral", "happy", "sad", "angry", "afraid", 
+            "surprised", "disgusted", "curious", "confused"
+        ]
+        doc = "Current emotional state"
+    )
+    
+    # Emotion values (0.0 - 1.0)
+    float sparkle:emotion:happiness = 0.5
+    float sparkle:emotion:sadness = 0.0
+    float sparkle:emotion:anger = 0.0
+    float sparkle:emotion:fear = 0.0
+    float sparkle:emotion:surprise = 0.0
+    
+    # Emotional response
+    float sparkle:emotion:volatility = 0.5 (
+        doc = "How quickly emotions change (0.0 - 1.0)"
+    )
+    
+    float sparkle:emotion:memory = 0.7 (
+        doc = "How long emotions persist (0.0 - 1.0)"
+    )
+    
+    # Animation and voice effects
+    rel sparkle:emotion:expressionMap = [] (
+        doc = "Relationship to expression mappings for different emotions"
+    )
+    
+    rel sparkle:emotion:voiceMap = [] (
+        doc = "Relationship to voice modulation mappings for different emotions"
+    )
+}
+
+class "SparklePerceptionAPI" (
+    inherits = </APISchemaBase>
+    customData = {
+        token apiSchemaType = "singleApply"
+        bool skipCodeGeneration = true
+    }
+    doc = """Perception system for NPCs and creatures."""
+)
+{
+    # Perception capabilities
+    bool sparkle:perception:canSee = true
+    bool sparkle:perception:canHear = true
+    bool sparkle:perception:canSmell = false
+    
+    # Perception ranges
+    float sparkle:perception:visualRange = 20.0 (
+        doc = "Maximum visual detection range in meters"
+    )
+    
+    float sparkle:perception:hearingRange = 15.0 (
+        doc = "Maximum auditory detection range in meters"
+    )
+    
+    # Visual perception specifics
+    float sparkle:perception:fieldOfView = 120.0 (
+        doc = "Horizontal field of view in degrees"
+    )
+    
+    float sparkle:perception:visionHeight = 1.7 (
+        doc = "Height of vision center point (for line of sight)"
+    )
+    
+    # Perception memory
+    float sparkle:perception:memoryDuration = 10.0 (
+        doc = "How long perceived entities remain in memory (seconds)"
+    )
+    
+    # Perception filters
+    token[] sparkle:perception:interestedIn = ["player", "allies", "enemies"] (
+        doc = "Types of entities this perceiver is interested in"
+    )
+    
+    token[] sparkle:perception:ignoredTypes = [] (
+        doc = "Types of entities this perceiver ignores"
+    )
+}
