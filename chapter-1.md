@@ -43,26 +43,23 @@ Game data evolves rapidly during production, as do the requirements of descripti
 
 ## USD as a Universal Game Database
 
-Universal Scene Description (USD) offers a potential solution to this fragmentation by providing:
+Universal Scene Description (USD) offers solutions to these challenges by providing:
 
-1. A standardized way to define schemas
+1. A standard way to define schemas
 2. Strong composition capabilities
 3. A growing ecosystem of integrations
 4. High-performance data access patterns
 
-However, USD was not initially designed with game-specific workflows in mind, and traditional USD schema approaches have several limitations for game development:
+However, certain practical aspects of USD development and integration pose challenges in an environment where fundamental data schemas evolve rapidly:
 
-### Limitations of Traditional USD Schema Approaches
+1. **Compilation Requirements**: Changing a schemas requires compilation of C++ plugins for each DCC tool and engine.
+2. **Build Matrix Explosion**: Each (DCC tool, platform, engine version) combination requires separate plugin builds.
+3. **Deployment Complexities**: Distributing compiled plugins across a studio is challenging, especially with regular schema updates.
+4. **Data Migration**: A schema change must also be accompanied by migration of existing data.
 
-1. **Compilation Requirements**: Traditional USD schemas require compilation of C++ plugins for each DCC tool and engine.
-2. **Deployment Complexities**: Distributing compiled plugins across a studio is challenging, especially with regular schema updates.
-3. **Build Matrix Explosion**: Each (DCC tool, platform, engine version) combination requires separate plugin builds.
-4. **Inflexible Updates**: Schema changes require rebuilding and redeploying across the entire ecosystem.
-5. **Difficult Data Migration**: A schema change must also be accompanied by migration of existing data.
+## Codeless Schemas
 
-## Introducing an Alternative: Codeless Schemas
-
-USD actually has an elegant solution for these development challenges: **Codeless Schemas**.
+USD has a solution for these development challenges: **Codeless Schemas**.
 
 Codeless schemas, introduced in USD 21.08, allow schema definitions to be populated into the schema registry without requiring compilation and linking of generated C++ code. This means schemas can travel with the assets themselves, rather than requiring precompiled plugin updates at each stage of the pipeline:
 
