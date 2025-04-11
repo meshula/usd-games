@@ -1,0 +1,115 @@
+#usda 1.0
+(
+    defaultPrim = "Enemy"
+    metersPerUnit = 1.0
+    upAxis = "Y"
+)
+
+def "Enemy" (
+    assetInfo = {
+        asset identifier = @./enemy.usda@
+        string name = "goblin_01"
+    }
+)
+{
+    token sparkle:entity:id = "goblin_01"
+    
+    variantSet "complexityLOD" = {
+        "high" {
+            over "Appearance" {
+                def Cube "HighDetailMesh" (
+                    prepend references = @./meshes/high_detail.usda@</Mesh>
+                )
+                {
+                    double size = 2.0
+                    int polygons = 10000
+                }
+            }
+            
+            over "Animation" {
+                def Xform "FullSkeleton" {
+                    int joints = 80
+                }
+            }
+            
+            over "Behavior" {
+                def Xform "FullBehaviorTree" {
+                    string sparkle:ai:type = "complex"
+                    int sparkle:ai:maxDecisionDepth = 5
+                    rel sparkle:ai:patrolPath = </Level/Paths/ComplexPatrol>
+                }
+            }
+            
+            over "Physics" {
+                def Xform "DetailedPhysics" {
+                    token sparkle:physics:collisionType = "perBone"
+                    rel sparkle:physics:collisionMesh = </Enemy/Appearance/HighDetailMesh>
+                }
+            }
+        }
+        
+        "medium" {
+            over "Appearance" {
+                def Cube "MediumDetailMesh" (
+                    prepend references = @./meshes/medium_detail.usda@</Mesh>
+                )
+                {
+                    double size = 1.9
+                    int polygons = 3000
+                }
+            }
+            
+            over "Animation" {
+                def Xform "MediumSkeleton" {
+                    int joints = 30
+                }
+            }
+            
+            over "Behavior" {
+                def Xform "SimplifiedBehaviorTree" {
+                    string sparkle:ai:type = "basic"
+                    int sparkle:ai:maxDecisionDepth = 3
+                    rel sparkle:ai:patrolPath = </Level/Paths/SimplePatrol>
+                }
+            }
+            
+            over "Physics" {
+                def Xform "SimplifiedPhysics" {
+                    token sparkle:physics:collisionType = "capsule"
+                    rel sparkle:physics:collisionMesh = </Enemy/Appearance/MediumDetailMesh>
+                }
+            }
+        }
+        
+        "low" {
+            over "Appearance" {
+                def Cube "LowDetailMesh" (
+                    prepend references = @./meshes/low_detail.usda@</Mesh>
+                )
+                {
+                    double size = 1.8
+                    int polygons = 500
+                }
+            }
+            
+            over "Animation" {
+                def Xform "LowSkeleton" {
+                    int joints = 10
+                }
+            }
+            
+            over "Behavior" {
+                def Xform "MinimalBehaviorTree" {
+                    string sparkle:ai:type = "stationary"
+                    int sparkle:ai:maxDecisionDepth = 1
+                }
+            }
+            
+            over "Physics" {
+                def Xform "MinimalPhysics" {
+                    token sparkle:physics:collisionType = "simple"
+                }
+            }
+        }
+    }
+}

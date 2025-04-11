@@ -1,0 +1,7 @@
+usd-core                # OpenUSD installation
+pyray                   # Python bindings for raylib
+pyopengl                # OpenGL bindings
+numpy                   # For numerical operations
+pillow                  # For image handling
+pyyaml                  # For configuration files
+pytest                  # For testing
