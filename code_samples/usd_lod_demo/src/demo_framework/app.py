@@ -14,7 +14,7 @@ from pathlib import Path
 from typing import Dict, List, Tuple, Optional, Any, Union, Type
 
 # Use pyray instead of raylib
-import pyray as rl
+import raylib as rl
 
 from .renderer import Renderer
 from .ui import UI
@@ -66,12 +66,12 @@ class DemoApplication:
         self.assets_path = Path(__file__).parent.parent.parent / "assets"
         
         # Initialize raylib
-        rl.init_window(width, height, title)
-        rl.set_target_fps(60)
+        rl.InitWindow(width, height, title.encode('utf-8'))
+        rl.SetTargetFPS(60)
         
         # Initialize camera - PyRay uses a different approach
         # Create a camera with position, target, up vector, fov, and projection type
-        self.camera = rl.Camera3D()
+        self.camera = rl.Camera()
         self.camera.position = rl.Vector3(10.0, 5.0, 10.0)
         self.camera.target = rl.Vector3(0.0, 0.0, 0.0)
         self.camera.up = rl.Vector3(0.0, 1.0, 0.0)

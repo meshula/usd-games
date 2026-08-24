@@ -1,5 +1,5 @@
 usd-core                # OpenUSD installation
-pyray                   # Python bindings for raylib
+raylib                  # Python bindings for raylib
 pyopengl                # OpenGL bindings
 numpy                   # For numerical operations
 pillow                  # For image handling

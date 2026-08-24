@@ -10,7 +10,7 @@ import os
 from pathlib import Path
 from typing import Dict, List, Tuple, Optional
 
-import pyray as rl
+import raylib as rl
 
 from pxr import Usd, UsdGeom, Sdf, Gf, Tf
 

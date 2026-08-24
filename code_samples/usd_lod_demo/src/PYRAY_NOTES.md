@@ -6,7 +6,7 @@ This project uses PyRay instead of Raylib-py for rendering. PyRay is a more acti
 
 When working with PyRay instead of Raylib-py, be aware of these key differences:
 
-1. **Import Method**: Use `import pyray as rl` instead of `import raylib as rl`
+1. **Import Method**: Use `import raylib as rl` instead of `import raylib as rl`
 
 2. **Color Creation**: PyRay uses `rl.Color(r, g, b, a)` instead of `Color(r, g, b, a)` 
 
@@ -50,13 +50,13 @@ When working with PyRay instead of Raylib-py, be aware of these key differences:
 
 2. When in doubt about a function's parameters, you can use Python's built-in help:
    ```python
-   import pyray as rl
+   import raylib as rl
    help(rl.draw_cylinder)
    ```
 
 3. For structures and objects, examine their attributes:
    ```python
-   import pyray as rl
+   import raylib as rl
    camera = rl.Camera3D()
    dir(camera)  # Shows all attributes and methods
    ```

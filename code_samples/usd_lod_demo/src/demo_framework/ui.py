@@ -4,7 +4,7 @@ UI Module
 Provides a simple UI system for the demos built on top of Raylib.
 """
 
-import pyray as rl
+import raylib as rl
 from typing import Optional, Tuple, Dict, List, Callable
 
 class UI:

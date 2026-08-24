@@ -5,7 +5,7 @@ Provides abstraction for rendering USD scenes using Raylib.
 Simplifies the representation of USD elements for visualization.
 """
 
-import pyray as rl
+import raylib as rl
 from typing import List, Dict, Tuple, Optional, Union
 
 # Type aliases
@@ -37,7 +37,7 @@ class Renderer:
             "default": rl.Color(150, 150, 150, 255)      # Gray
         }
     
-    def draw_box(self, position: Position, size: Size, color: Union[rl.Color, str, ColorType], 
+    def draw_box(self, position: Position, size: Size, color: Union[str, ColorType], 
                 wire: bool = False, label: Optional[str] = None):
         """
         Draw a box (cube) representing a USD prim
@@ -85,7 +85,7 @@ class Renderer:
             # Draw text
             rl.draw_text(label, int(screen_pos.x), int(screen_pos.y), 20, rl.Color(255, 255, 255, 255))
     
-    def draw_sphere(self, position: Position, radius: float, color: Union[rl.Color, str, ColorType],
+    def draw_sphere(self, position: Position, radius: float, color: Union[str, ColorType],
                    wire: bool = False, label: Optional[str] = None):
         """
         Draw a sphere representing a USD prim
@@ -132,7 +132,7 @@ class Renderer:
             # Draw text
             rl.draw_text(label, int(screen_pos.x), int(screen_pos.y), 20, rl.Color(255, 255, 255, 255))
     
-    def draw_cylinder(self, position: Position, radius: float, height: float, color: Union[rl.Color, str, ColorType],
+    def draw_cylinder(self, position: Position, radius: float, height: float, color: Union[str, ColorType],
                      wire: bool = False, label: Optional[str] = None):
         """
         Draw a cylinder representing a USD prim
@@ -218,7 +218,7 @@ class Renderer:
             # Draw text
             rl.draw_text(label, int(screen_pos.x), int(screen_pos.y), 20, rl.Color(255, 255, 255, 255))
     
-    def draw_line_3d(self, start_pos: Position, end_pos: Position, color: Union[rl.Color, str, ColorType]):
+    def draw_line_3d(self, start_pos: Position, end_pos: Position, color: Union[str, ColorType]):
         """
         Draw a 3D line
         
@@ -255,7 +255,7 @@ class Renderer:
         """Draw a grid on the XZ plane"""
         rl.draw_grid(slices, spacing)
     
-    def draw_bounding_box(self, min_point: Position, max_point: Position, color: Union[rl.Color, str, ColorType]):
+    def draw_bounding_box(self, min_point: Position, max_point: Position, color: Union[str, ColorType]):
         """
         Draw a bounding box from min and max points
         
@@ -292,7 +292,7 @@ class Renderer:
         rl.draw_bounding_box(bounds, color)
     
     def draw_text_3d(self, position: Position, text: str, font_size: int = 20, 
-                    color: Union[rl.Color, str, ColorType] = (255, 255, 255, 255)):
+                    color: Union[str, ColorType] = (255, 255, 255, 255)):
         """
         Draw text at a 3D position
         
