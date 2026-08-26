@@ -2,7 +2,7 @@
 
 This repo explores patterns for game develop with OpenUSD.
 
-This guide is designed for technical directors, pipeline engineers, and game developers who are integrating USD into their workflows. It focuses specifically on solving the schema deployment challenge that arises when working across multiple digital content creation tools and runtime platforms.
+This guide is designed for artists, technical directors, pipeline engineers, and game developers who are integrating USD into their workflows. It focuses specifically on solving the schema deployment challenge that arises when working across multiple digital content creation tools and runtime platforms.
 
 ```
 ╭──────────────────────────────────────────────────────────────────────────╮
