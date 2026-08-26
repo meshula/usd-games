@@ -29,7 +29,7 @@ This guide is designed for technical directors, pipeline engineers, and game dev
 
 ## Contributing
 
-This is a no vibe-coding project. Please see [CONTRIBUTING.md](contributing.md) for details.
+This is a no vibe-coding project. Please see [CONTRIBUTING.md](CONTRIBUTING.md) for details.
 
 ## License
 
