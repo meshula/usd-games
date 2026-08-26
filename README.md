@@ -23,7 +23,7 @@ This guide is designed for technical directors, pipeline engineers, and game dev
 ## Contents
 
 - [Book](book/index.md) A curriculum for game development
-  - [Code Samples](book-code-samples/) Code samples to accompany the book
+  - [Code Samples](book_code_samples/) Code samples to accompany the book
 - [Games Intent](intent-games/index.md) An "intent" for game development with USD
 - [Research Notes](research/index.md) Curated notes on game development with USD
 
