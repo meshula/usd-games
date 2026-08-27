@@ -14,6 +14,8 @@
 
 Purposes are not a single choice
 
+### Runtime Requirements
+
 - functional (non-imageable) representations
     - navigation graph
     - trigger volumes
@@ -36,4 +38,6 @@ Purposes are not a single choice
     -  aerial traversal requires potentially all regions loaded, not just adjacent
         - at some altitute the whole map may be visible at card/potato or may switch to a different high-altitude or planetary portal
     
-          
+### Departmental and Authoring Structure
+
+TBD
