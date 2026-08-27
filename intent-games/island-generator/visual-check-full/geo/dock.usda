@@ -1,0 +1,116 @@
+#usda 1.0
+(
+    defaultPrim = "dock"
+)
+
+def Xform "dock"
+{
+    class Xform "plank"
+    {
+        def Mesh "Geo" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            float3[] extent = [(-1, 0, -4), (1, 0.2, 4)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [0, 1, 2, 3, 4, 7, 6, 5, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0]
+            rel material:binding = </dock/plank/Materials/wood>
+            point3f[] points = [(-1, 0, -4), (1, 0, -4), (1, 0, 4), (-1, 0, 4), (-1, 0.2, -4), (1, 0.2, -4), (1, 0.2, 4), (-1, 0.2, 4)]
+            uniform token purpose = "render"
+            uniform token subdivisionScheme = "none"
+        }
+
+        def "Materials"
+        {
+            def Material "wood"
+            {
+                token outputs:surface.connect = </dock/plank/Materials/wood/PreviewSurface.outputs:surface>
+
+                def Shader "PreviewSurface"
+                {
+                    uniform token info:id = "UsdPreviewSurface"
+                    color3f inputs:diffuseColor = (0.46, 0.31, 0.17)
+                    float inputs:metallic = 0
+                    float inputs:roughness = 0.8
+                    token outputs:surface
+                }
+            }
+        }
+    }
+
+    def "plank_0" (
+        instanceable = true
+        prepend references = </dock/plank>
+    )
+    {
+        double3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def "plank_1" (
+        instanceable = true
+        prepend references = </dock/plank>
+    )
+    {
+        double3 xformOp:translate = (0, 0, 8)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def "plank_2" (
+        instanceable = true
+        prepend references = </dock/plank>
+    )
+    {
+        double3 xformOp:translate = (0, 0, 16)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def "plank_3" (
+        instanceable = true
+        prepend references = </dock/plank>
+    )
+    {
+        double3 xformOp:translate = (0, 0, 24)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def "plank_4" (
+        instanceable = true
+        prepend references = </dock/plank>
+    )
+    {
+        double3 xformOp:translate = (0, 0, 32)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Mesh "Mooring" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        float3[] extent = [(-0.05, 0, -0.05), (0.05, 1.5, 0.05)]
+        int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+        int[] faceVertexIndices = [0, 1, 2, 3, 4, 7, 6, 5, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0]
+        rel material:binding = </dock/Materials/bark>
+        point3f[] points = [(-0.05, 0, -0.05), (0.05, 0, -0.05), (0.05, 0, 0.05), (-0.05, 0, 0.05), (-0.05, 1.5, -0.05), (0.05, 1.5, -0.05), (0.05, 1.5, 0.05), (-0.05, 1.5, 0.05)]
+        uniform token purpose = "guide"
+        uniform token subdivisionScheme = "none"
+    }
+
+    def "Materials"
+    {
+        def Material "bark"
+        {
+            token outputs:surface.connect = </dock/Materials/bark/PreviewSurface.outputs:surface>
+
+            def Shader "PreviewSurface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.3, 0.19, 0.1)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.9
+                token outputs:surface
+            }
+        }
+    }
+}
+

@@ -1,0 +1,67 @@
+#usda 1.0
+(
+    defaultPrim = "palm"
+)
+
+def Xform "palm"
+{
+    def Mesh "Trunk" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        float3[] extent = [(-0.175, 0, -0.175), (0.175, 8, 0.175)]
+        int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+        int[] faceVertexIndices = [0, 1, 2, 3, 4, 7, 6, 5, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0]
+        rel material:binding = </palm/Materials/bark>
+        point3f[] points = [(-0.175, 0, -0.175), (0.175, 0, -0.175), (0.175, 0, 0.175), (-0.175, 0, 0.175), (-0.175, 8, -0.175), (0.175, 8, -0.175), (0.175, 8, 0.175), (-0.175, 8, 0.175)]
+        uniform token purpose = "render"
+        uniform token subdivisionScheme = "none"
+    }
+
+    def "Materials"
+    {
+        def Material "bark"
+        {
+            token outputs:surface.connect = </palm/Materials/bark/PreviewSurface.outputs:surface>
+
+            def Shader "PreviewSurface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.3, 0.19, 0.1)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.9
+                token outputs:surface
+            }
+        }
+
+        def Material "foliage"
+        {
+            token outputs:surface.connect = </palm/Materials/foliage/PreviewSurface.outputs:surface>
+
+            def Shader "PreviewSurface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.11, 0.4, 0.15)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.85
+                token outputs:surface
+            }
+        }
+    }
+
+    def Mesh "Fronds" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        float3[] extent = [(-1.6, 0, -1.6), (1.6, 1.2, 1.6)]
+        int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+        int[] faceVertexIndices = [0, 1, 2, 3, 4, 7, 6, 5, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0]
+        rel material:binding = </palm/Materials/foliage>
+        point3f[] points = [(-1.6, 0, -1.6), (1.6, 0, -1.6), (1.6, 0, 1.6), (-1.6, 0, 1.6), (-1.6, 1.2, -1.6), (1.6, 1.2, -1.6), (1.6, 1.2, 1.6), (-1.6, 1.2, 1.6)]
+        uniform token purpose = "render"
+        uniform token subdivisionScheme = "none"
+        double3 xformOp:translate = (0, 8, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+}
+

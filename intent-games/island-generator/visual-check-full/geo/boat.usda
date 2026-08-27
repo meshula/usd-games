@@ -1,0 +1,65 @@
+#usda 1.0
+(
+    defaultPrim = "boat"
+)
+
+def Xform "boat"
+{
+    def Mesh "Hull" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        float3[] extent = [(-1.1, 0, -3), (1.1, 1.5, 3)]
+        int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+        int[] faceVertexIndices = [0, 1, 2, 3, 4, 7, 6, 5, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0]
+        rel material:binding = </boat/Materials/wood>
+        point3f[] points = [(-1.1, 0, -3), (1.1, 0, -3), (1.1, 0, 3), (-1.1, 0, 3), (-1.1, 1.5, -3), (1.1, 1.5, -3), (1.1, 1.5, 3), (-1.1, 1.5, 3)]
+        uniform token purpose = "render"
+        uniform token subdivisionScheme = "none"
+    }
+
+    def "Materials"
+    {
+        def Material "wood"
+        {
+            token outputs:surface.connect = </boat/Materials/wood/PreviewSurface.outputs:surface>
+
+            def Shader "PreviewSurface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.46, 0.31, 0.17)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.8
+                token outputs:surface
+            }
+        }
+
+        def Material "bark"
+        {
+            token outputs:surface.connect = </boat/Materials/bark/PreviewSurface.outputs:surface>
+
+            def Shader "PreviewSurface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.3, 0.19, 0.1)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.9
+                token outputs:surface
+            }
+        }
+    }
+
+    def Mesh "Mast" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        float3[] extent = [(-0.075, 0, -0.075), (0.075, 5, 0.075)]
+        int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+        int[] faceVertexIndices = [0, 1, 2, 3, 4, 7, 6, 5, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0]
+        rel material:binding = </boat/Materials/bark>
+        point3f[] points = [(-0.075, 0, -0.075), (0.075, 0, -0.075), (0.075, 0, 0.075), (-0.075, 0, 0.075), (-0.075, 5, -0.075), (0.075, 5, -0.075), (0.075, 5, 0.075), (-0.075, 5, 0.075)]
+        uniform token purpose = "render"
+        uniform token subdivisionScheme = "none"
+    }
+}
+

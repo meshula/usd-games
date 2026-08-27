@@ -1,0 +1,25 @@
+#usda 1.0
+(
+    defaultPrim = "Island"
+    framesPerSecond = 24
+    metersPerUnit = 1
+    subLayers = [
+        @buildings.usda@,
+        @roads.usda@
+    ]
+    timeCodesPerSecond = 24
+    upAxis = "Y"
+)
+
+def Xform "Island" (
+    kind = "assembly"
+)
+{
+    over "Town" (
+        prepend apiSchemas = ["GeomModelAPI"]
+    )
+    {
+        float3[] extentsHint = [(-829.0862, 1.0077434, -896.79047), (827.8519, 155.31067, 916.9501)]
+    }
+}
+

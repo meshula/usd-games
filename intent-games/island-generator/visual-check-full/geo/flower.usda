@@ -1,0 +1,67 @@
+#usda 1.0
+(
+    defaultPrim = "flower"
+)
+
+def Xform "flower"
+{
+    def Mesh "Stem" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        float3[] extent = [(-0.02, 0, -0.02), (0.02, 0.4, 0.02)]
+        int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+        int[] faceVertexIndices = [0, 1, 2, 3, 4, 7, 6, 5, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0]
+        rel material:binding = </flower/Materials/foliage>
+        point3f[] points = [(-0.02, 0, -0.02), (0.02, 0, -0.02), (0.02, 0, 0.02), (-0.02, 0, 0.02), (-0.02, 0.4, -0.02), (0.02, 0.4, -0.02), (0.02, 0.4, 0.02), (-0.02, 0.4, 0.02)]
+        uniform token purpose = "render"
+        uniform token subdivisionScheme = "none"
+    }
+
+    def "Materials"
+    {
+        def Material "foliage"
+        {
+            token outputs:surface.connect = </flower/Materials/foliage/PreviewSurface.outputs:surface>
+
+            def Shader "PreviewSurface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.11, 0.4, 0.15)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.85
+                token outputs:surface
+            }
+        }
+
+        def Material "blossom"
+        {
+            token outputs:surface.connect = </flower/Materials/blossom/PreviewSurface.outputs:surface>
+
+            def Shader "PreviewSurface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.88, 0.3, 0.45)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.55
+                token outputs:surface
+            }
+        }
+    }
+
+    def Mesh "Blossom" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        float3[] extent = [(-0.14, 0, -0.14), (0.14, 0.22, 0.14)]
+        int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+        int[] faceVertexIndices = [0, 1, 2, 3, 4, 7, 6, 5, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0]
+        rel material:binding = </flower/Materials/blossom>
+        point3f[] points = [(-0.14, 0, -0.14), (0.14, 0, -0.14), (0.14, 0, 0.14), (-0.14, 0, 0.14), (-0.14, 0.22, -0.14), (0.14, 0.22, -0.14), (0.14, 0.22, 0.14), (-0.14, 0.22, 0.14)]
+        uniform token purpose = "render"
+        uniform token subdivisionScheme = "none"
+        double3 xformOp:translate = (0, 0.4, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+}
+

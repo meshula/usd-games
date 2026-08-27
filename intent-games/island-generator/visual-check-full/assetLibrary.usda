@@ -1,0 +1,202 @@
+#usda 1.0
+
+def Scope "Assets"
+{
+    def Xform "DecoratedPalm_0" (
+        prepend apiSchemas = ["GeomModelAPI"]
+        kind = "component"
+        prepend references = @geo/palm.usda@
+    )
+    {
+        float3[] extentsHint = [(-1.6, 0, -1.6), (1.6, 9.2, 1.6)]
+    }
+
+    def Xform "DecoratedPalm_1" (
+        prepend apiSchemas = ["GeomModelAPI"]
+        kind = "component"
+        prepend references = @geo/palm.usda@
+    )
+    {
+        float3[] extentsHint = [(-1.6, 0, -1.6), (1.6, 9.2, 1.6)]
+    }
+
+    def Xform "DecoratedPalm_2" (
+        prepend apiSchemas = ["GeomModelAPI"]
+        kind = "component"
+        prepend references = @geo/palm.usda@
+    )
+    {
+        float3[] extentsHint = [(-1.6, 0, -1.6), (1.6, 9.2, 1.6)]
+    }
+
+    def Xform "Broadleaf" (
+        prepend apiSchemas = ["GeomModelAPI"]
+        kind = "component"
+        prepend references = @geo/broadleaf.usda@
+    )
+    {
+        float3[] extentsHint = [(-2.75, 0, -2.75), (2.75, 10, 2.75)]
+    }
+
+    def Xform "Rock_0" (
+        prepend apiSchemas = ["GeomModelAPI"]
+        kind = "component"
+        prepend references = @geo/rock.usda@
+    )
+    {
+        float3[] extentsHint = [(-0.9, 0, -0.8), (0.9, 1.2, 0.8)]
+    }
+
+    def Xform "Rock_1" (
+        prepend apiSchemas = ["GeomModelAPI"]
+        kind = "component"
+        prepend references = @geo/rock.usda@
+    )
+    {
+        float3[] extentsHint = [(-0.9, 0, -0.8), (0.9, 1.2, 0.8)]
+    }
+
+    def Xform "Rock_2" (
+        prepend apiSchemas = ["GeomModelAPI"]
+        kind = "component"
+        prepend references = @geo/rock.usda@
+    )
+    {
+        float3[] extentsHint = [(-0.9, 0, -0.8), (0.9, 1.2, 0.8)]
+    }
+
+    def Xform "FoliageClump" (
+        prepend apiSchemas = ["GeomModelAPI"]
+        kind = "component"
+        prepend references = @geo/foliage.usda@
+    )
+    {
+        float3[] extentsHint = [(-0.17, 0, -0.14490454), (0.17, 0.258, 0.14490399)]
+    }
+
+    def Xform "Hut_0" (
+        prepend apiSchemas = ["GeomModelAPI"]
+        kind = "component"
+        prepend references = @geo/hut.usda@
+    )
+    {
+        float3[] extentsHint = [(-2.5, 0, -2.5), (2.5, 4, 2.5)]
+    }
+
+    def Xform "Hut_1" (
+        prepend apiSchemas = ["GeomModelAPI"]
+        kind = "component"
+        prepend references = @geo/hut.usda@
+    )
+    {
+        float3[] extentsHint = [(-2.5, 0, -2.5), (2.5, 4, 2.5)]
+    }
+
+    def Xform "Hut_2" (
+        prepend apiSchemas = ["GeomModelAPI"]
+        kind = "component"
+        prepend references = @geo/hut.usda@
+    )
+    {
+        float3[] extentsHint = [(-2.5, 0, -2.5), (2.5, 4, 2.5)]
+    }
+
+    def Xform "Boat" (
+        prepend apiSchemas = ["GeomModelAPI"]
+        kind = "component"
+        prepend references = @geo/boat.usda@
+    )
+    {
+        float3[] extentsHint = [(-1.1, 0, -3), (1.1, 5, 3)]
+    }
+
+    def Xform "Dock" (
+        prepend apiSchemas = ["GeomModelAPI"]
+        kind = "component"
+        prepend references = @geo/dock.usda@
+    )
+    {
+        float3[] extentsHint = [(-1, 0, -4), (1, 1.5, 36)]
+    }
+
+    def Xform "MarketProp" (
+        prepend apiSchemas = ["GeomModelAPI"]
+        kind = "component"
+        prepend references = @geo/market.usda@
+    )
+    {
+        float3[] extentsHint = [(-1.3, 0, -1.3), (1.3, 2.7, 1.3)]
+    }
+
+    def Xform "Flower_0" (
+        prepend apiSchemas = ["GeomModelAPI"]
+        kind = "component"
+        prepend references = @geo/flower.usda@
+    )
+    {
+        float3[] extentsHint = [(-0.14, 0, -0.14), (0.14, 0.62, 0.14)]
+    }
+
+    def Xform "Flower_1" (
+        prepend apiSchemas = ["GeomModelAPI"]
+        kind = "component"
+        prepend references = @geo/flower.usda@
+    )
+    {
+        float3[] extentsHint = [(-0.14, 0, -0.14), (0.14, 0.62, 0.14)]
+    }
+
+    def Xform "Flower_2" (
+        prepend apiSchemas = ["GeomModelAPI"]
+        kind = "component"
+        prepend references = @geo/flower.usda@
+    )
+    {
+        float3[] extentsHint = [(-0.14, 0, -0.14), (0.14, 0.62, 0.14)]
+    }
+
+    def Xform "VillageBlock" (
+        prepend apiSchemas = ["GeomModelAPI"]
+        kind = "assembly"
+    )
+    {
+        float3[] extentsHint = [(-8.5, 0, -8.5), (8.5, 4, 8.5)]
+
+        def "Block_0" (
+            instanceable = true
+            prepend references = </Assets/Hut_0>
+        )
+        {
+            double3 xformOp:translate = (-6, 0, -6)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def "Block_1" (
+            instanceable = true
+            prepend references = </Assets/Hut_1>
+        )
+        {
+            double3 xformOp:translate = (6, 0, -6)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def "Block_2" (
+            instanceable = true
+            prepend references = </Assets/Hut_2>
+        )
+        {
+            double3 xformOp:translate = (-6, 0, 6)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def "Block_3" (
+            instanceable = true
+            prepend references = </Assets/Hut_0>
+        )
+        {
+            double3 xformOp:translate = (6, 0, 6)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+    }
+}
+
