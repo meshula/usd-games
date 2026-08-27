@@ -40,4 +40,29 @@ Purposes are not a single choice
     
 ### Departmental and Authoring Structure
 
-TBD
+A unique aspect of the Games Intent versus others is that a full pipeline is embodied in a single scene hierarchy, all the way from low level load scheduling all the way to rendering setup for final look, with interactive elements interleaved.
+
+#### Sublayers
+
+- Cinematics
+- Render Grading
+- Camera
+- Look Grading
+- Lighting
+- Interactive Audio
+- Gameplay Local
+- Effects & Particles
+- Physics & Simulation
+- Collision
+- Diegetic Audio
+- Level Design
+    - Dressing
+    - Active areas
+    - Navigation Graph
+- Level Layout
+    - Refined detail
+    - Gray box
+- Narrative Audio
+- Gameplay Global
+    - Portal Graph
+
